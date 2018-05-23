@@ -21,7 +21,7 @@ var MAINEFFECTSACTION = {
 
 var MotionStreakTest1 = cc.Layer.extend({
     _winSize: null,
-    _root: null,
+    _color_action: null,
     _target: null,
     _streak: null,
     _streak_id: 0,
@@ -40,6 +40,12 @@ var MotionStreakTest1 = cc.Layer.extend({
 
         MAINEFFECTSACTION._EFFECTS_MAIN_LAYER = this;
         this._winSize = cc.director.getWinSize();
+
+        this._color_action = cc.sequence(
+            cc.tintTo(.52, 1, 1, 1),
+            cc.tintTo(.2, 255, 255, 255)
+        ).repeatForever();
+
         // const obj = cc.sys.capabilities
         // for (const key in obj) {
         //     if (obj.hasOwnProperty(key)) {
@@ -166,6 +172,9 @@ var MotionStreakTest1 = cc.Layer.extend({
      * @param {number} action_time    特效持续时间
      */
     attackingAction: function (index, action_time) {
+        cc.log('attacking...');
+
+
         if (typeof index !== 'number' || index < 0 || index > this._pos_start_array.length) {
             throw new Error('Invalid argument - ' + index);
             return false;
@@ -203,11 +212,8 @@ var MotionStreakTest1 = cc.Layer.extend({
         })))
 
         _streak._target = _emitter;
-        var colorAction = cc.sequence(
-            cc.tintTo(.52, 1, 1, 1),
-            cc.tintTo(.2, 255, 255, 255)
-        ).repeatForever();
-        _streak.runAction(colorAction);
+
+        _streak.runAction(this._color_action.clone());
 
         this._streak_id += 1;
         if (this._pos_start_pointer === this._pos_start_array.length - 1) {
@@ -238,22 +244,6 @@ var MotionStreakTest1 = cc.Layer.extend({
                 return 0;
                 break;
         }
-    },
-
-    addShader: function () {
-        if ('opengl' in cc.sys.capabilities) {
-            this._shader = new cc.GLProgram("res/Shaders/example_Outline.vsh", "res/Shaders/example_Outline.fsh");
-            this._shader.addAttribute(cc.ATTRIBUTE_NAME_POSITION, cc.VERTEX_ATTRIB_POSITION);
-            this._shader.addAttribute(cc.ATTRIBUTE_NAME_TEX_COORD, cc.VERTEX_ATTRIB_TEX_COORDS);
-            this._shader.addAttribute(cc.ATTRIBUTE_NAME_COLOR, cc.VERTEX_ATTRIB_COLOR);
-
-            this._shader.link();
-            this._shader.updateUniforms();
-            this._shader.use();
-            this._shader.setUniformLocationWith1f(this._shader.getUniformLocationForName('u_threshold'), 1);
-            this._shader.setUniformLocationWith3f(this._shader.getUniformLocationForName('u_outlineColor'), 0 / 255, 150 / 255, 150 / 255);
-        }
-        this._streak.getTexture().shaderProgram = this._shader;
     },
 
     update: function (dt) {

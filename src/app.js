@@ -1,27 +1,34 @@
 /*
  * @Author: Liang Liang
- * @Date: 2018-05-23 11:09:39
+ * @Date: 2018-05-21 15:09:39
  * @LastEditors: Liang Liang
  * @LastEditTime: 2018-05-23 11:10:04
  * @Description: 
  */
-
-
-var MAINEFFECTSACTION = {
-    _EFFECTS_MAIN_LAYER: null,
-    addEffects: function (time) {
-        // console.log(cc.Director);
-        if (this._EFFECTS_MAIN_LAYER === null) {
-            return false;
+(function (window) {
+    window.MAINEFFECTSACTION = {
+        _EFFECTS_MAIN_LAYER: null,
+        /**
+         * @func 
+         * @desc 向舞台添加攻击特效
+         * @param {object} _pos_start     起点坐标格式 cc.p(x,y)
+         * @param {object} _pos_end       终点点坐标格式 cc.p(x,y)
+         * @param {number} action_time    特效持续时间
+         */
+        addEffects: function (_pos_action_start, _pos_action_end, _action_time) {
+            if (this._EFFECTS_MAIN_LAYER === null) {
+                return false;
+            }
+            this._EFFECTS_MAIN_LAYER.attackingAction(_pos_action_start, _pos_action_end, _action_time);
         }
-        var _temp_start_array_len = this._EFFECTS_MAIN_LAYER._pos_start_array.length - 1;
-        this._EFFECTS_MAIN_LAYER.attackingAction(this._EFFECTS_MAIN_LAYER.randomNum(0, _temp_start_array_len), time);
     }
-}
+}(window));
 
 var MotionStreakTest1 = cc.Layer.extend({
+    _default_action_time: 4,
     _winSize: null,
     _color_action: null,
+    _webgl: true,
     _target: null,
     _streak: null,
     _streak_id: 0,
@@ -49,6 +56,9 @@ var MotionStreakTest1 = cc.Layer.extend({
             cc.tintTo(.2, 255, 255, 255)
         ).repeatForever();
 
+        this._webgl = 'opengl' in cc.sys.capabilities && cc._renderType === cc.game.RENDER_TYPE_WEBGL;
+        cc.log('this._webgl = ' + this._webgl)
+
         // const obj = cc.sys.capabilities
         // for (const key in obj) {
         //     if (obj.hasOwnProperty(key)) {
@@ -61,26 +71,25 @@ var MotionStreakTest1 = cc.Layer.extend({
         var _this = this,
             _temp_start_array_len = this._pos_start_array.length - 1;
 
-        var _listener = cc.EventListener.create({
-            event: cc.EventListener.TOUCH_ONE_BY_ONE,
-            swallowTouches: true,                       // 在 onTouchBegan 方法返回 true 时吞掉事件，不再向下传递。
-            onTouchBegan: function (touch, event) {
-                // var target = event.getCurrentTarget()
-                // var locationInNode = target.convertToNodeSpace(touch.getLocation())
-                _this.attackingAction(_this.randomNum(0, _temp_start_array_len));
-                // var s = target.getContentSize()
-                // var rect = cc.rect(0, 0, s.width, s.height)
-                return false;
-            },
-            onTouchMoved: function (touch, event) {
-                return false;
-            },
-            onTouchEnded: function (touch, event) {
-                return false;
-            }
-        });
-        cc.eventManager.addListener(_listener, this);
-
+        // var _listener = cc.EventListener.create({
+        //     event: cc.EventListener.TOUCH_ONE_BY_ONE,
+        //     swallowTouches: true,                       // 在 onTouchBegan 方法返回 true 时吞掉事件，不再向下传递。
+        //     onTouchBegan: function (touch, event) {
+        //         // var target = event.getCurrentTarget()
+        //         // var locationInNode = target.convertToNodeSpace(touch.getLocation())
+        //         _this.attackingAction(_this.randomNum(0, _temp_start_array_len));
+        //         // var s = target.getContentSize()
+        //         // var rect = cc.rect(0, 0, s.width, s.height)
+        //         return false;
+        //     },
+        //     onTouchMoved: function (touch, event) {
+        //         return false;
+        //     },
+        //     onTouchEnded: function (touch, event) {
+        //         return false;
+        //     }
+        // });
+        // cc.eventManager.addListener(_listener, this);
         this.scheduleUpdate();
     },
     addBg: function () {
@@ -170,48 +179,75 @@ var MotionStreakTest1 = cc.Layer.extend({
     /**
      * @func 
      * @desc 向舞台添加攻击特效
-     * @param {number} index       起始点索引 
+     * @param {object} _pos_start     起点坐标格式 cc.p(x,y)
+     * @param {object} _pos_end       终点点坐标格式 cc.p(x,y)
      * @param {number} action_time    特效持续时间
      */
-    attackingAction: function (index, action_time) {
-        if (typeof index !== 'number' || index < 0 || index > this._pos_start_array.length) {
-            throw new Error('Invalid argument - ' + index);
-            return false;
+    attackingAction: function (_pos_start, _pos_end, action_time) {
+        if (typeof _pos_start === 'number' && typeof _pos_start !== 'object' && typeof _pos_end !== 'object') {
+            action_time = _pos_start;
+            var _action_pos_start = this._pos_start_array[this.randomNum(0, this._pos_start_array.length - 1)];
+            var _action_pos_end = this._pos_end_array[this.randomNum(0, this._pos_end_array.length - 1)];
+        } else {
+            if (typeof _pos_start === 'object' && typeof _pos_start.x === 'number' && typeof _pos_start.y === 'number') {
+                var _action_pos_start = _pos_start;
+            } else {
+                // throw new Error('_pos_start has to be cc.p(x,y)');
+                var _action_pos_start = this._pos_start_array[this.randomNum(0, this._pos_start_array.length - 1)];
+            }
+
+            if (typeof _pos_end === 'object' && typeof _pos_end.x === 'number' && typeof _pos_end.y === 'number') {
+                var _action_pos_end = _pos_end;
+            } else {
+
+                var _action_pos_end = this._pos_end_array[this.randomNum(0, this._pos_end_array.length - 1)];
+                // throw new Error('_pos_end has to be cc.p(x,y)');
+            }
+            if (!action_time || typeof action_time !== 'number') {
+                action_time = this._default_action_time;
+            }
         }
-        action_time = action_time || 3;
-        if (typeof action_time !== 'number') {
-            throw new Error('Invalid argument - ' + action_time);
-            return false;
+
+
+        cc.log(action_time)
+
+        if (this._webgl) {
+            var particles_img = res.particles_attack
+        } else {
+            var particles_img = res.particles_attack_ie
         }
+        var _this = this,
+            _emitter = new cc.ParticleSystem(particles_img),
+            _path_array = this.createPath(_action_pos_start, cc.pAdd(_action_pos_end, cc.p(-61, -2))),
+            _a3 = cc.cardinalSplineTo(action_time, _path_array, .9);
 
-        var _start_pos = this._pos_start_array[index],
-            _streak = new cc.MotionStreak(.7, .5, 2, cc.color(255, 255, 255), res.s_streak);
+        if (this._webgl) {
+            var _streak = new cc.MotionStreak(.7, .5, 2, cc.color(255, 255, 255), res.s_streak);
+            _streak.id = this._streak_id;
+            _streak.del = false;
+            _streak.setPosition(_action_pos_start);
+            this.addChild(_streak, 2);
+            this._streak_array.push(_streak);
 
-        _streak.id = this._streak_id;
-        _streak.del = false;
-        _streak.setPosition(_start_pos);
-        this.addChild(_streak, 2);
-        this._streak_array.push(_streak);
-
-        var _emitter = new cc.ParticleSystem(res.s_particles1);
-        // this._emitter.setScale(.5) 
-        _emitter.setPosition(_start_pos);
-        _emitter.streak = _streak;
+            _emitter.streak = _streak;
+            _streak._target = _emitter;
+            _streak.runAction(this._color_action.clone());
+        }
+        // this._emitter.setScale(.5)
+        // _emitter.texture = cc.textureCache.addImage(res.s_streak);
+        _emitter.setPosition(_action_pos_start);
         this.addChild(_emitter, 5);
 
-        var _temp_num = this.randomNum(0, this._pos_end_array.length - 1);
-        var _path_array = this.createPath(_start_pos, cc.pAdd(this._pos_end_array[_temp_num], cc.p(-61, -2)));
-
-        var _a3 = cc.cardinalSplineTo(action_time, _path_array, .9);
-
-        _emitter.runAction(cc.sequence(_a3, cc.delayTime(.3), cc.callFunc(function (target) {
+        _emitter.runAction(cc.sequence(_a3, cc.callFunc(function () {
+            _this.playHitEffect(_action_pos_end);
+        }), cc.delayTime(.3), cc.callFunc(function (target) {
+            // _this.playHitEffect(_pos_end);
             target.removeFromParent();
-            target.streak.del = true;
+            if (this._webgl) {
+                target.streak.del = true;
+            }
         })))
 
-        _streak._target = _emitter;
-
-        _streak.runAction(this._color_action.clone());
 
         this._streak_id += 1;
         if (this._pos_start_pointer === this._pos_start_array.length - 1) {
@@ -219,6 +255,20 @@ var MotionStreakTest1 = cc.Layer.extend({
         } else {
             this._pos_start_pointer += 1;
         }
+    },
+    /**
+     * @func
+     * @desc 添加击中效果
+     * @param {cc.p} pos_hit
+     */
+    playHitEffect: function (pos_hit) {
+        if (typeof pos_hit.x !== 'number' || typeof pos_hit.y !== 'number') {
+            throw new Error('argument has to be cc.p(x,y)')
+        }
+        var _emitter = new cc.ParticleSystem(res.particle_hit);
+        _emitter.setScale(.5);
+        _emitter.setPosition(cc.pAdd(pos_hit, cc.p(-61, -2)));
+        this.addChild(_emitter, 6);
     },
     /**
      * @func 
@@ -229,7 +279,7 @@ var MotionStreakTest1 = cc.Layer.extend({
      */
     randomNum: function (minNum, maxNum) {
         if (typeof minNum !== 'number' || typeof minNum !== 'number') {
-            throw new Error('arguments has to be number')
+            throw new Error('argument has to be Number')
         }
         switch (arguments.length) {
             case 1:
@@ -245,19 +295,21 @@ var MotionStreakTest1 = cc.Layer.extend({
     },
 
     update: function (dt) {
-        for (var _index = 0, _len = this._streak_array.length; _index < _len; _index += 1) {
-            if (this._streak_array[_index].del) {
-                continue;
-            }
-            var _streak = this._streak_array[_index];
-            if (_streak.target) {
-                _streak.removeFromParent();
-                this._streak_array[_index] = null;
-            } else {
-                var _emitter = _streak._target;
-                var pos = _emitter.convertToWorldSpace(cc.p(_emitter.width / 2, 0));
-                _streak.x = pos.x;
-                _streak.y = pos.y;
+        if (this._webgl) {
+            for (var _index = 0, _len = this._streak_array.length; _index < _len; _index += 1) {
+                if (this._streak_array[_index].del) {
+                    continue;
+                }
+                var _streak = this._streak_array[_index];
+                if (_streak.target) {
+                    _streak.removeFromParent();
+                    this._streak_array[_index] = null;
+                } else {
+                    var _emitter = _streak._target;
+                    var pos = _emitter.convertToWorldSpace(cc.p(_emitter.width / 2, 0));
+                    _streak.x = pos.x;
+                    _streak.y = pos.y;
+                }
             }
         }
     }

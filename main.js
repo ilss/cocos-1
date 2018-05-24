@@ -57,7 +57,8 @@ cc.game.onStart = function () {
         document.body.removeChild(document.getElementById("cocosLoading"));
 
     // Pass true to enable retina display, on Android disabled by default to improve performance
-    cc.view.enableRetina(sys.os === sys.OS_IOS ? true : false);
+    // cc.view.enableRetina(sys.os === sys.OS_IOS ? true : false);
+    cc.view.enableRetina(false);
 
     // Disable auto full screen on baidu and wechat, you might also want to eliminate sys.BROWSER_TYPE_MOBILE_QQ
     if (sys.isMobile &&
@@ -77,6 +78,7 @@ cc.game.onStart = function () {
 
     // The game will be resized when browser size change
     cc.view.resizeWithBrowserSize(true);
+
     //load resources
 
     cc.LoaderScene.preload(g_resources, function () {

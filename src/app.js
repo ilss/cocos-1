@@ -33,7 +33,10 @@ var MotionStreakTest1 = cc.Layer.extend({
         cc.p(488, 490),
         cc.p(430, 476),
         cc.p(660, 476),
-        cc.p(664, 562)
+        cc.p(664, 562),
+        cc.p(546, 489),
+        cc.p(764, 531),
+        cc.p(732, 423)
     ],
     onEnter: function () {
         this._super();
@@ -42,7 +45,7 @@ var MotionStreakTest1 = cc.Layer.extend({
         this._winSize = cc.director.getWinSize();
 
         this._color_action = cc.sequence(
-            cc.tintTo(.52, 1, 1, 1),
+            cc.tintTo(.52, 1, 100, 100),
             cc.tintTo(.2, 255, 255, 255)
         ).repeatForever();
 
@@ -102,7 +105,6 @@ var MotionStreakTest1 = cc.Layer.extend({
 
         for (var i = 0; i < num; i += 1) {
             var _temp_pos = cc.p(_pos_margin + distance * i, _pos_sence_top);
-
             this._pos_start_array.push(_temp_pos);
         }
         for (i = 0; i < num; i += 1) {
@@ -134,6 +136,7 @@ var MotionStreakTest1 = cc.Layer.extend({
         _pos_start.y > _pos_end.y ? _direction_y = -1 : _direction_y = 1;
 
         _pos_x_distance = parseInt(Math.abs((_pos_start.x - _pos_end.x) / _inflection_num), 10);
+        _pos_x_distance = _pos_x_distance > 80 ? _pos_x_distance : 80;
         _pos_y_distance = parseInt(Math.abs((_pos_start.y - _pos_end.y) / _inflection_num), 10);
 
         _pos_array.push(_pos_start);
@@ -152,7 +155,6 @@ var MotionStreakTest1 = cc.Layer.extend({
                     _temp_pos_x = _pos_end.x;
                     _temp_pos_y = i === 0 ? _pos_start.y : _pos_array[i].y;
                 } else {
-                    _pos_x_distance = _pos_x_distance > 80 ? _pos_x_distance : 80;
                     _temp_pos_x = _pos_start.x + _pos_x_distance * (i + 1) * _direction_x * _temp_alternate + _temp_diverge;
                     _temp_pos_y = i === 0 ? _pos_start.y : _pos_array[i].y;
                 }
@@ -203,7 +205,6 @@ var MotionStreakTest1 = cc.Layer.extend({
         var _temp_num = this.randomNum(0, this._pos_end_array.length - 1);
         var _path_array = this.createPath(_start_pos, cc.pAdd(this._pos_end_array[_temp_num], cc.p(-61, -2)));
 
-        // var _a3 = cc.moveTo(1.5, cc.pAdd(this._pos_end_array[_temp_num], cc.p(-61, -2)))
         var _a3 = cc.cardinalSplineTo(action_time, _path_array, .9);
 
         _emitter.runAction(cc.sequence(_a3, cc.delayTime(.3), cc.callFunc(function (target) {

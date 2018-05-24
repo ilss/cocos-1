@@ -51,6 +51,25 @@
  }
  *
  */
+(function (window) {
+    window.MAIN_EFFECTS_ACTION = {
+        _EFFECTS_MAIN_LAYER: null,
+        /**
+         * @func 
+         * @desc 向舞台添加攻击特效
+         * @param {object} _pos_start     起点坐标格式 cc.p(x,y)
+         * @param {object} _pos_end       终点点坐标格式 cc.p(x,y)
+         * @param {number} action_time    特效持续时间
+         */
+        addEffects: function (_pos_action_start, _pos_action_end, _action_time) {
+            if (this._EFFECTS_MAIN_LAYER === null) {
+                return false;
+            }
+            this._EFFECTS_MAIN_LAYER.attackingAction(_pos_action_start, _pos_action_end, _action_time);
+        }
+    }
+}(window));
+
 cc.game.onStart = function () {
     var sys = cc.sys;
     if (!sys.isNative && document.getElementById("cocosLoading")) //If referenced loading.js, please remove it
@@ -80,9 +99,8 @@ cc.game.onStart = function () {
     cc.view.resizeWithBrowserSize(true);
 
     //load resources
-
-    cc.LoaderScene.preload(g_resources, function () {
-        cc.director.runScene(new HelloWorldScene());
+    cc.LoaderScene.preload(MAIN_EFFECTS_ACTION.g_resources, function () {
+        cc.director.runScene(new MAIN_EFFECTS_ACTION.HelloWorldScene());
     }, this);
 };
 

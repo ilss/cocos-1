@@ -174,9 +174,6 @@ var MotionStreakTest1 = cc.Layer.extend({
      * @param {number} action_time    特效持续时间
      */
     attackingAction: function (index, action_time) {
-        cc.log('attacking...');
-
-
         if (typeof index !== 'number' || index < 0 || index > this._pos_start_array.length) {
             throw new Error('Invalid argument - ' + index);
             return false;
@@ -200,7 +197,7 @@ var MotionStreakTest1 = cc.Layer.extend({
         // this._emitter.setScale(.5) 
         _emitter.setPosition(_start_pos);
         _emitter.streak = _streak;
-        this.addChild(_emitter, 2);
+        this.addChild(_emitter, 5);
 
         var _temp_num = this.randomNum(0, this._pos_end_array.length - 1);
         var _path_array = this.createPath(_start_pos, cc.pAdd(this._pos_end_array[_temp_num], cc.p(-61, -2)));

@@ -43,38 +43,9 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
         ).repeatForever();
 
         this._webgl = 'opengl' in cc.sys.capabilities && cc._renderType === cc.game.RENDER_TYPE_WEBGL;
-        // cc.log('this._webgl = ' + this._webgl)
 
-        // const obj = cc.sys.capabilities
-        // for (const key in obj) {
-        //     if (obj.hasOwnProperty(key)) {
-        //         cc.log(obj[key])
-        //     }
-        // }
         this.addBg();
         this.createStartPos(5, 215);
-
-        // var _this = this,
-        //     _temp_start_array_len = this._pos_start_array.length - 1;
-        // var _listener = cc.EventListener.create({
-        //     event: cc.EventListener.TOUCH_ONE_BY_ONE,
-        //     swallowTouches: true,                       // 在 onTouchBegan 方法返回 true 时吞掉事件，不再向下传递。
-        //     onTouchBegan: function (touch, event) {
-        //         // var target = event.getCurrentTarget()
-        //         // var locationInNode = target.convertToNodeSpace(touch.getLocation())
-        //         _this.attackingAction(_this.randomNum(0, _temp_start_array_len));
-        //         // var s = target.getContentSize()
-        //         // var rect = cc.rect(0, 0, s.width, s.height)
-        //         return false;
-        //     },
-        //     onTouchMoved: function (touch, event) {
-        //         return false;
-        //     },
-        //     onTouchEnded: function (touch, event) {
-        //         return false;
-        //     }
-        // });
-        // cc.eventManager.addListener(_listener, this);
         this.scheduleUpdate();
     },
     addBg: function () {
@@ -90,8 +61,8 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
     },
     /**
      * 生成发射点坐标
-     * @num         点的数量
-     * @distance    两点距离
+     * @param {number} num         点的数量
+     * @param {number} distance    两点距离
      */
     createStartPos: function (num, distance) {
         var _pos_margin = (this._winSize.width - distance * (num - 1)) / 2,
@@ -121,29 +92,37 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
             _temp_pos = null,
             _pos_x_distance = 0,
             _pos_y_distance = 0,
-            // _inflection_num = this.randomNum(2, 4),
+            _temp__distance_num = 0,
             _inflection_num = 4;
 
+        _temp__distance_num = _inflection_num + MAIN_EFFECTS_ACTION.randomNum(0, 5);
         _pos_start = _pos_start || 0;
         _pos_end = _pos_end || 0;
         _pos_start.x > _pos_end.x ? _direction_x = 1 : _direction_x = -1;
         _pos_start.y > _pos_end.y ? _direction_y = -1 : _direction_y = 1;
 
-        _pos_x_distance = parseInt(Math.abs((_pos_start.x - _pos_end.x) / _inflection_num), 10);
-        _pos_x_distance = _pos_x_distance > 80 ? _pos_x_distance : 80;
-        _pos_y_distance = parseInt(Math.abs((_pos_start.y - _pos_end.y) / _inflection_num), 10);
+        _pos_x_distance = parseInt(Math.abs((_pos_start.x - _pos_end.x) / _temp__distance_num), 10);
+        _pos_x_distance = _pos_x_distance > 80 ? _pos_x_distance : 20 * MAIN_EFFECTS_ACTION.randomNum(2, 6);
+        _pos_y_distance = parseInt(Math.abs((_pos_start.y - _pos_end.y) / _temp__distance_num), 10);
 
+        //处理高度相同的点相互攻击
         _pos_array.push(_pos_start);
 
         var _temp_alternate = 1,    //控制转折   1时x不变  -1时y不变
             _temp_pos_x = 0,
-            _temp_pos_y = 0,
-            _temp_diverge = 10 * this.randomNum(0, 4);
+            _temp_pos_y = 0;
 
         for (; i < _inflection_num; i += 1) {
+            _temp_diverge = 10 * MAIN_EFFECTS_ACTION.randomNum(0, 5);
             if (_temp_alternate === 1) {
                 _temp_pos_x = i === 0 ? _pos_start.x : _pos_array[i].x;
-                _temp_pos_y = _pos_start.y + _pos_y_distance * (i + 1) * _direction_y + _temp_diverge * _direction_y;
+                if (_pos_y_distance < 40) {
+                    _pos_y_distance = 10 * MAIN_EFFECTS_ACTION.randomNum(0, 5);
+                    _direction_y = _pos_start.y < this._winSize.height / 2 ? 1 : -1;
+                    _temp_pos_y = _pos_start.y + _pos_y_distance * (i + 1) * _direction_y + _temp_diverge * _direction_y;
+                } else {
+                    _temp_pos_y = _pos_start.y + _pos_y_distance * (i + 1) * _direction_y + _temp_diverge * _direction_y;
+                }
             } else {
                 if (i === _inflection_num - 1) {
                     _temp_pos_x = _pos_end.x;
@@ -174,21 +153,19 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
             _action_pos_end = null;
         if (typeof _pos_start === 'number' && typeof _pos_start !== 'object' && typeof _pos_end !== 'object') {
             action_time = _pos_start;
-            _action_pos_start = this._pos_start_array[this.randomNum(0, this._pos_start_array.length - 1)];
-            _action_pos_end = this._pos_end_array[this.randomNum(0, this._pos_end_array.length - 1)];
+            _action_pos_start = this._pos_start_array[MAIN_EFFECTS_ACTION.randomNum(0, this._pos_start_array.length - 1)];
+            _action_pos_end = this._pos_end_array[MAIN_EFFECTS_ACTION.randomNum(0, this._pos_end_array.length - 1)];
         } else {
             if (typeof _pos_start === 'object' && typeof _pos_start.x === 'number' && typeof _pos_start.y === 'number') {
                 _action_pos_start = _pos_start;
             } else {
-                // throw new Error('_pos_start has to be cc.p(x,y)');
-                _action_pos_start = this._pos_start_array[this.randomNum(0, this._pos_start_array.length - 1)];
+                _action_pos_start = this._pos_start_array[MAIN_EFFECTS_ACTION.randomNum(0, this._pos_start_array.length - 1)];
             }
 
             if (typeof _pos_end === 'object' && typeof _pos_end.x === 'number' && typeof _pos_end.y === 'number') {
                 _action_pos_end = _pos_end;
             } else {
-                _action_pos_end = this._pos_end_array[this.randomNum(0, this._pos_end_array.length - 1)];
-                // throw new Error('_pos_end has to be cc.p(x,y)');
+                _action_pos_end = this._pos_end_array[MAIN_EFFECTS_ACTION.randomNum(0, this._pos_end_array.length - 1)];
             }
             if (!action_time || typeof action_time !== 'number') {
                 action_time = this._default_action_time;
@@ -253,29 +230,6 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
         _emitter.setScale(.5);
         _emitter.setPosition(pos_hit);
         this.addChild(_emitter, 6);
-    },
-    /**
-     * @func 
-     * @desc 返回minNum 到 maxNum 之间的随机数，包括minNum 和 maxNum.
-     * @param {number} minNum 
-     * @param {number} maxNum 
-     * @returns 
-     */
-    randomNum: function (minNum, maxNum) {
-        if (typeof minNum !== 'number' || typeof minNum !== 'number') {
-            throw new Error('argument has to be Number')
-        }
-        switch (arguments.length) {
-            case 1:
-                return parseInt(Math.random() * minNum + 1, 10);
-                break;
-            case 2:
-                return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10);
-                break;
-            default:
-                return 0;
-                break;
-        }
     },
 
     update: function (dt) {

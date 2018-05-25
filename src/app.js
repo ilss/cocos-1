@@ -20,13 +20,16 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
     _pos_start_pointer: 0,
     _pos_start_array: [],
     _pos_end_array: [
-        cc.p(488, 490),
-        cc.p(430, 476),
-        cc.p(660, 476),
-        cc.p(664, 562),
-        cc.p(546, 489),
-        cc.p(764, 531),
-        cc.p(732, 423)
+        cc.p(371, 474),
+        cc.p(428, 490),
+        cc.p(486, 490),
+        cc.p(438, 580),
+        cc.p(531, 615),
+        cc.p(602, 475),
+        cc.p(605, 560),
+        cc.p(646, 540),
+        cc.p(672, 420),
+        cc.p(704, 530)
     ],
     onEnter: function () {
         this._super();
@@ -35,12 +38,12 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
         this._winSize = cc.director.getWinSize();
 
         this._color_action = cc.sequence(
-            cc.tintTo(.52, 1, 100, 100),
+            cc.tintTo(.52, 19, 40, 60),
             cc.tintTo(.2, 255, 255, 255)
         ).repeatForever();
 
         this._webgl = 'opengl' in cc.sys.capabilities && cc._renderType === cc.game.RENDER_TYPE_WEBGL;
-        cc.log('this._webgl = ' + this._webgl)
+        // cc.log('this._webgl = ' + this._webgl)
 
         // const obj = cc.sys.capabilities
         // for (const key in obj) {
@@ -51,9 +54,8 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
         this.addBg();
         this.createStartPos(5, 215);
 
-        var _this = this,
-            _temp_start_array_len = this._pos_start_array.length - 1;
-
+        // var _this = this,
+        //     _temp_start_array_len = this._pos_start_array.length - 1;
         // var _listener = cc.EventListener.create({
         //     event: cc.EventListener.TOUCH_ONE_BY_ONE,
         //     swallowTouches: true,                       // 在 onTouchBegan 方法返回 true 时吞掉事件，不再向下传递。
@@ -93,14 +95,14 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
      */
     createStartPos: function (num, distance) {
         var _pos_margin = (this._winSize.width - distance * (num - 1)) / 2,
-            _pos_sence_top = this._winSize.height - 100;
+            _pos_sence_top = this._winSize.height - 118;
 
         for (var i = 0; i < num; i += 1) {
             var _temp_pos = cc.p(_pos_margin + distance * i, _pos_sence_top);
             this._pos_start_array.push(_temp_pos);
         }
         for (i = 0; i < num; i += 1) {
-            var _temp_pos = cc.p(_pos_margin + distance * i, 100);
+            var _temp_pos = cc.p(_pos_margin + distance * i, 118);
             this._pos_start_array.push(_temp_pos);
         }
     },
@@ -202,7 +204,7 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
 
         var _this = this,
             _emitter = new cc.ParticleSystem(particles_img),
-            _path_array = this.createPath(_action_pos_start, cc.pAdd(_action_pos_end, cc.p(-61, -2))),
+            _path_array = this.createPath(_action_pos_start, _action_pos_end),
             _a3 = cc.cardinalSplineTo(action_time, _path_array, .9);
 
         if (this._webgl) {
@@ -220,14 +222,16 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
         _emitter.setPosition(_action_pos_start);
         this.addChild(_emitter, 5);
 
-        _emitter.runAction(cc.sequence(_a3, cc.callFunc(function () {
-            _this.playHitEffect(_action_pos_end);
-        }), cc.delayTime(.3), cc.callFunc(function (target) {
-            target.removeFromParent();
-            if (this._webgl) {
-                target.streak.del = true;
-            }
-        })));
+        _emitter.runAction(
+            cc.sequence(_a3, cc.callFunc(function () {
+                _this.playHitEffect(_action_pos_end);
+            }), cc.delayTime(.3), cc.callFunc(function (target) {
+                target.removeFromParent();
+                if (this._webgl) {
+                    target.streak.del = true;
+                }
+            }))
+        );
 
         this._streak_id += 1;
         if (this._pos_start_pointer === this._pos_start_array.length - 1) {
@@ -247,7 +251,7 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
         }
         var _emitter = new cc.ParticleSystem(MAIN_EFFECTS_ACTION.res.particle_hit);
         _emitter.setScale(.5);
-        _emitter.setPosition(cc.pAdd(pos_hit, cc.p(-61, -2)));
+        _emitter.setPosition(pos_hit);
         this.addChild(_emitter, 6);
     },
     /**

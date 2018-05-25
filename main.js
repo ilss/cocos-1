@@ -72,8 +72,8 @@
 
 cc.game.onStart = function () {
     var sys = cc.sys;
-    if (!sys.isNative && document.getElementById("cocosLoading")) //If referenced loading.js, please remove it
-        document.body.removeChild(document.getElementById("cocosLoading"));
+    // if (!sys.isNative && document.getElementById("cocosLoading")) //If referenced loading.js, please remove it
+    //     document.body.removeChild(document.getElementById("cocosLoading"));
 
     // Pass true to enable retina display, on Android disabled by default to improve performance
     // cc.view.enableRetina(sys.os === sys.OS_IOS ? true : false);

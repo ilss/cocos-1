@@ -12,4 +12,4 @@ cocos2d-Js 攻击特效
 * @param {number} action_time    特效持续时间
 */
 
-MAIN_EFFECTS_ACTION.addEffects(_pos_action_start, _pos_action_end, _action_time)
+ATTCAKING_ACTION(_pos_action_start, _pos_action_end, _action_time)

@@ -106,6 +106,7 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
         _pos_y_distance = parseInt(Math.abs((_pos_start.y - _pos_end.y) / _temp__distance_num), 10);
 
         //处理高度相同的点相互攻击
+        // _temp_pos_y_distance = Math.abs(_action_pos_end.y - _action_pos_start.y);
         _pos_array.push(_pos_start);
 
         var _temp_alternate = 1,    //控制转折   1时x不变  -1时y不变
@@ -117,6 +118,7 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
             if (_temp_alternate === 1) {
                 _temp_pos_x = i === 0 ? _pos_start.x : _pos_array[i].x;
                 if (_pos_y_distance < 40) {
+                    // cc.log('高度差距太小---' + _pos_y_distance);
                     _pos_y_distance = 10 * MAIN_EFFECTS_ACTION.randomNum(0, 5);
                     _direction_y = _pos_start.y < this._winSize.height / 2 ? 1 : -1;
                     _temp_pos_y = _pos_start.y + _pos_y_distance * (i + 1) * _direction_y + _temp_diverge * _direction_y;
@@ -159,6 +161,7 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
             if (typeof _pos_start === 'object' && typeof _pos_start.x === 'number' && typeof _pos_start.y === 'number') {
                 _action_pos_start = _pos_start;
             } else {
+                // throw new Error('_pos_start has to be cc.p(x,y)');
                 _action_pos_start = this._pos_start_array[MAIN_EFFECTS_ACTION.randomNum(0, this._pos_start_array.length - 1)];
             }
 
@@ -166,6 +169,7 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
                 _action_pos_end = _pos_end;
             } else {
                 _action_pos_end = this._pos_end_array[MAIN_EFFECTS_ACTION.randomNum(0, this._pos_end_array.length - 1)];
+                // throw new Error('_pos_end has to be cc.p(x,y)');
             }
             if (!action_time || typeof action_time !== 'number') {
                 action_time = this._default_action_time;

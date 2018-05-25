@@ -11,6 +11,7 @@
         "cocos2d"
     ],
     "jsList": [
+        "src/interface.js",
         "src/resource.js",
         "src/app.js"
     ]

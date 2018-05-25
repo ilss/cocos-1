@@ -3,7 +3,7 @@
 <plist version="1.0">
   <dict>
     <key>maxParticles</key>
-    <integer>150</integer>
+    <integer>200</integer>
     <key>angle</key>
     <real>360</real>
     <key>angleVariance</key>

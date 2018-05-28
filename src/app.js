@@ -2,10 +2,9 @@
  * @Author: Liang Liang
  * @Date: 2018-05-21 15:09:39
  * @LastEditors: Liang Liang
- * @LastEditTime: 2018-05-23 11:10:04
+ * @LastEditTime: 2018-05-28 15:10:04
  * @Description: 
  */
-
 
 MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
     _default_action_time: 4,
@@ -103,16 +102,10 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
         _pos_start.y > _pos_end.y ? _direction_y = -1 : _direction_y = 1;
 
         _pos_x_distance = parseInt(Math.abs((_pos_start.x - _pos_end.x) / _temp__distance_num), 10);
-        // _inflection_num = Math.abs(_pos_start.x - _pos_end.x) > 120 ? _inflection_num : _inflection_num += 1;
-
-        // cc.log('_pos_x_distance = ' + _pos_x_distance);
-        // cc.log('_inflection_num = ' + _inflection_num);
-
         _pos_x_distance = _pos_x_distance > 80 ? _pos_x_distance : 20 * MAIN_EFFECTS_ACTION.randomNum(2, 6);
         _pos_y_distance = parseInt(Math.abs((_pos_start.y - _pos_end.y) / _temp__distance_num), 10);
 
         //处理高度相同的点相互攻击
-        // _temp_pos_y_distance = Math.abs(_action_pos_end.y - _action_pos_start.y);
         _pos_array.push(_pos_start);
 
         var _temp_alternate = 1,    //控制转折   1时x不变  -1时y不变
@@ -124,7 +117,6 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
             if (_temp_alternate === 1) {
                 _temp_pos_x = i === 0 ? _pos_start.x : _pos_array[i].x;
                 if (_pos_y_distance < 40) {
-                    // cc.log('高度差距太小---' + _pos_y_distance);
                     _pos_y_distance = 10 * MAIN_EFFECTS_ACTION.randomNum(0, 5);
                     _direction_y = _pos_start.y < this._winSize.height / 2 ? 1 : -1;
                     _temp_pos_y = _pos_start.y + _pos_y_distance * (i + 1) * _direction_y + _temp_diverge * _direction_y;

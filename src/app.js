@@ -14,7 +14,6 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
     _target: null,
     _streak: null,
     _dt: 0,
-    _pos_start_pointer: 0,
     _pos_start_array: [],
     _pos_end_array: [
         cc.p(371, 474),
@@ -179,11 +178,7 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
         }
 
         //区分处理IE，用比较弱的粒子。
-        if (this._webgl) {
-            var particles_img = MAIN_EFFECTS_ACTION.res.particles_attack
-        } else {
-            var particles_img = MAIN_EFFECTS_ACTION.res.particles_attack_ie
-        }
+        var particles_img = this._webgl ? MAIN_EFFECTS_ACTION.res.particles_attack : MAIN_EFFECTS_ACTION.res.particles_attack_ie;
 
         var _this = this,
             _emitter = new cc.ParticleSystem(particles_img),
@@ -216,11 +211,11 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
             }))
         );
 
-        if (this._pos_start_pointer === this._pos_start_array.length - 1) {
-            this._pos_start_pointer = 0;
-        } else {
-            this._pos_start_pointer += 1;
-        }
+        // if (this._pos_start_pointer === this._pos_start_array.length - 1) {
+        //     this._pos_start_pointer = 0;
+        // } else {
+        //     this._pos_start_pointer += 1;
+        // }
         _emitter = null;
     },
     /**

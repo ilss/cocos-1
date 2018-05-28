@@ -14,8 +14,6 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
     _webgl: true,
     _target: null,
     _streak: null,
-    _streak_id: 0,
-    _streak_array: [],
     _dt: 0,
     _pos_start_pointer: 0,
     _pos_start_array: [],
@@ -46,7 +44,7 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
 
         this.addBg();
         this.createStartPos(5, 215);
-        this.scheduleUpdate();
+        // this.scheduleUpdate();
     },
     addBg: function () {
         var bg = new cc.Sprite(MAIN_EFFECTS_ACTION.res.game_bg);
@@ -58,6 +56,7 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
         this.addChild(bg, 99);
         bg.x = this._winSize.width / 2;
         bg.y = this._winSize.height / 2;
+        bg = null;
     },
     /**
      * 生成发射点坐标
@@ -76,6 +75,8 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
             var _temp_pos = cc.p(_pos_margin + distance * i, 118);
             this._pos_start_array.push(_temp_pos);
         }
+        _pos_margin = null;
+        _pos_sence_top = null;
     },
     /**
      * @func
@@ -100,8 +101,6 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
         _pos_end = _pos_end || 0;
         _pos_start.x > _pos_end.x ? _direction_x = 1 : _direction_x = -1;
         _pos_start.y > _pos_end.y ? _direction_y = -1 : _direction_y = 1;
-
-
 
         _pos_x_distance = parseInt(Math.abs((_pos_start.x - _pos_end.x) / _temp__distance_num), 10);
         // _inflection_num = Math.abs(_pos_start.x - _pos_end.x) > 120 ? _inflection_num : _inflection_num += 1;
@@ -163,6 +162,7 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
         var particles_img = null,
             _action_pos_start = null,
             _action_pos_end = null;
+
         if (typeof _pos_start === 'number' && typeof _pos_start !== 'object' && typeof _pos_end !== 'object') {
             action_time = _pos_start;
             _action_pos_start = this._pos_start_array[MAIN_EFFECTS_ACTION.randomNum(0, this._pos_start_array.length - 1)];
@@ -200,16 +200,18 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
 
         if (this._webgl) {
             var _streak = new cc.MotionStreak(.7, .5, 2, cc.color(255, 255, 255), MAIN_EFFECTS_ACTION.res.s_streak);
-            _streak.id = this._streak_id;
-            _streak.del = false;
             _streak.setPosition(_action_pos_start);
             this.addChild(_streak, 2);
-            this._streak_array.push(_streak);
 
-            _emitter.streak = _streak;
-            _streak._target = _emitter;
-            _streak.runAction(this._color_action.clone());
+            _streak.runAction(
+                cc.sequence(_a3.clone(), cc.callFunc(function (target) {
+                    target.removeFromParent();
+                    target = null;
+                }))
+            );
         }
+
+        _emitter.autoRemoveOnFinish = true;
         _emitter.setPosition(_action_pos_start);
         this.addChild(_emitter, 5);
 
@@ -218,18 +220,16 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
                 _this.playHitEffect(_action_pos_end);
             }), cc.delayTime(.3), cc.callFunc(function (target) {
                 target.removeFromParent();
-                if (this._webgl) {
-                    target.streak.del = true;
-                }
+                target = null;
             }))
         );
 
-        this._streak_id += 1;
         if (this._pos_start_pointer === this._pos_start_array.length - 1) {
             this._pos_start_pointer = 0;
         } else {
             this._pos_start_pointer += 1;
         }
+        _emitter = null;
     },
     /**
      * @func
@@ -243,27 +243,13 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
         var _emitter = new cc.ParticleSystem(MAIN_EFFECTS_ACTION.res.particle_hit);
         _emitter.setScale(.5);
         _emitter.setPosition(pos_hit);
+        _emitter.autoRemoveOnFinish = true;
         this.addChild(_emitter, 6);
+        _emitter = null;
     },
 
     update: function (dt) {
-        if (this._webgl) {
-            for (var _index = 0, _len = this._streak_array.length; _index < _len; _index += 1) {
-                if (this._streak_array[_index].del) {
-                    continue;
-                }
-                var _streak = this._streak_array[_index];
-                if (_streak.target) {
-                    _streak.removeFromParent();
-                    this._streak_array[_index] = null;
-                } else {
-                    var _emitter = _streak._target;
-                    var pos = _emitter.convertToWorldSpace(cc.p(_emitter.width / 2, 0));
-                    _streak.x = pos.x;
-                    _streak.y = pos.y;
-                }
-            }
-        }
+
     }
 });
 

@@ -101,7 +101,14 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
         _pos_start.x > _pos_end.x ? _direction_x = 1 : _direction_x = -1;
         _pos_start.y > _pos_end.y ? _direction_y = -1 : _direction_y = 1;
 
+
+
         _pos_x_distance = parseInt(Math.abs((_pos_start.x - _pos_end.x) / _temp__distance_num), 10);
+        // _inflection_num = Math.abs(_pos_start.x - _pos_end.x) > 120 ? _inflection_num : _inflection_num += 1;
+
+        // cc.log('_pos_x_distance = ' + _pos_x_distance);
+        // cc.log('_inflection_num = ' + _inflection_num);
+
         _pos_x_distance = _pos_x_distance > 80 ? _pos_x_distance : 20 * MAIN_EFFECTS_ACTION.randomNum(2, 6);
         _pos_y_distance = parseInt(Math.abs((_pos_start.y - _pos_end.y) / _temp__distance_num), 10);
 
@@ -131,6 +138,9 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
                     _temp_pos_y = i === 0 ? _pos_start.y : _pos_array[i].y;
                 } else {
                     _temp_pos_x = _pos_start.x + _pos_x_distance * (i + 1) * _direction_x * _temp_alternate + _temp_diverge;
+                    if (Math.abs(_temp_pos_x - _pos_end.y) < 10) {
+                        _temp_pos_x -= 20;
+                    }
                     _temp_pos_y = i === 0 ? _pos_start.y : _pos_array[i].y;
                 }
             }

@@ -2,7 +2,7 @@
  * @Author: Liang Liang
  * @Date: 2018-05-21 15:09:39
  * @LastEditors: Liang Liang
- * @LastEditTime: 2018-05-28 15:10:04
+ * @LastEditTime: 2018-05-31 15:10:04
  * @Description: 
  */
 
@@ -16,24 +16,40 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
     _item_index: 0,
     _dt: 0,
     _team_array: [],
+    _team_change_index: 0,
     _pos_start_array: [
-        cc.p(250, 770), cc.p(1048, 770),
-        cc.p(174, 598), cc.p(1128, 598),
-        cc.p(92, 424), cc.p(1214, 424),
-        cc.p(174, 252), cc.p(1128, 252),
-        cc.p(250, 78), cc.p(1048, 78)
+        cc.p(250, 770),
+        cc.p(174, 598),
+        cc.p(92, 424),
+        cc.p(174, 252),
+        cc.p(250, 78),
+
+        cc.p(1048, 78),
+        cc.p(1128, 252),
+        cc.p(1214, 424),
+        cc.p(1128, 598),
+        cc.p(1048, 770)
     ],
     _pos_end_array: [
-        cc.p(371, 474),
-        cc.p(428, 490),
-        cc.p(486, 490),
-        cc.p(438, 580),
-        cc.p(531, 615),
-        cc.p(602, 475),
-        cc.p(605, 560),
-        cc.p(646, 540),
-        cc.p(672, 420),
-        cc.p(704, 530)
+        cc.p(827, 538),
+        cc.p(828, 470),
+        cc.p(794, 421),
+        cc.p(776, 599),
+        cc.p(767, 548),
+        cc.p(763, 463),
+        cc.p(723, 572),
+        cc.p(717, 481),
+        cc.p(694, 444),
+        cc.p(677, 487),
+        cc.p(645, 631),
+        cc.p(619, 566),
+        cc.p(596, 495),
+        cc.p(602, 419),
+        cc.p(555, 543),
+        cc.p(534, 495),
+        cc.p(494, 548),
+        cc.p(474, 478),
+        cc.p(488, 430)
     ],
     onEnter: function () {
         this._super();
@@ -76,11 +92,16 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
         this.addChild(_tree);
     },
     initTeam: function () {
-        var _team = null;
+        var _team = null,
+            obj = {};
         for (var i = 0; i < 10; i++) {
-            _team = new Team_class('res/img/team_bg.png');
+            obj.url = 'res/img/team_bg.png';
+            obj.id = '0001';
+            obj.name = '战队 ' + i;
+            _team = new Team_class(obj);
             _team.setPosition(this._pos_start_array[i]);
             this.addChild(_team, 2);
+            this._team_array.push(_team);
         }
     },
     /**
@@ -232,6 +253,7 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
                 action_time = this._default_action_time;
             }
         }
+        _action_pos_end = cc.pAdd(_action_pos_end, cc.p(-8, -2));
 
         //区分处理IE，用比较弱的粒子。
         var particles_img = this._webgl ? MAIN_EFFECTS_ACTION.res.particles_attack : MAIN_EFFECTS_ACTION.res.particles_attack_ie;
@@ -290,7 +312,10 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
         this.addChild(_emitter, 6);
         _emitter = null;
     },
-
+    changeTeam: function (obj) {
+        this._team_array[this._team_change_index].changeTeam(obj);
+        this._team_change_index = this._team_change_index < 9 ? this._team_change_index + 1 : 0;
+    },
     update: function (dt) {
 
     }

@@ -25,7 +25,6 @@
             }
         },
     }
-
     /**
         * @func 
         * @desc 向舞台添加攻击特效
@@ -36,9 +35,29 @@
     /** @expose */
     function attackingAction (_pos_action_start, _pos_action_end, _action_time) {
         if (MAIN_EFFECTS_ACTION._EFFECTS_MAIN_LAYER === null) {
-            return false;
+            return;
         }
         MAIN_EFFECTS_ACTION._EFFECTS_MAIN_LAYER.attackingAction(_pos_action_start, _pos_action_end, _action_time);
     }
+
+
+    /**
+     * @func
+     * @desc  换队
+     * @param {any} obj  格式{team_id: '0001', team_img: 'res/img/team_bg.png', team_name: '战队 A'}
+     * @returns 
+     */
+    function changeTeam (obj) {
+        if (MAIN_EFFECTS_ACTION._EFFECTS_MAIN_LAYER === null) {
+            return;
+        }
+        if (typeof obj !== 'object') {
+            cc.log('changeTeam 参数必须为 object')
+            return;
+        }
+        MAIN_EFFECTS_ACTION._EFFECTS_MAIN_LAYER.changeTeam(obj);
+    }
+
     window["ATTCAKING_ACTION"] = attackingAction;
+    window["CHANGE_TEAM"] = changeTeam;
 }(window));

@@ -39,8 +39,6 @@
         }
         MAIN_EFFECTS_ACTION._EFFECTS_MAIN_LAYER.attackingAction(_pos_action_start, _pos_action_end, _action_time);
     }
-
-
     /**
      * @func
      * @desc  换队

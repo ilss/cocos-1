@@ -5,9 +5,10 @@
  * @LastEditTime: 2018-05-31 15:10:04
  * @Description: 
  */
-
 MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
-    _default_action_time: 4,
+    _opactions: {
+        _default_action_time: 4
+    },
     _winSize: null,
     _color_action: null,
     _webgl: true,
@@ -78,7 +79,7 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
         _bg.opacity = 0;
         _bg.runAction(cc.sequence(cc.fadeIn(2), cc.fadeOut(2)).repeatForever());
 
-        _bg = new cc.Sprite(MAIN_EFFECTS_ACTION.res.game_bg_light_buttom);
+        _bg = new cc.Sprite(MAIN_EFFECTS_ACTION.res.game_bg_light_bottom);
         this.addChild(_bg, 0);
         _bg.x = this._winSize.width / 2;
         _bg.y = this._winSize.height / 2;
@@ -124,7 +125,6 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
         _pos_margin = null;
         _pos_sence_top = null;
     },
-
     teamEntrance: function () {
         if (this._item_index === this._pos_start_array.length) {
             return;
@@ -250,10 +250,11 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
                 // throw new Error('_pos_end has to be cc.p(x,y)');
             }
             if (!action_time || typeof action_time !== 'number') {
-                action_time = this._default_action_time;
+                action_time = this._opactions._default_action_time;
             }
         }
-        _action_pos_end = cc.pAdd(_action_pos_end, cc.p(-8, -2));
+
+        // _action_pos_end = cc.pAdd(_action_pos_end, cc.p(-8, -2));
 
         //区分处理IE，用比较弱的粒子。
         var particles_img = this._webgl ? MAIN_EFFECTS_ACTION.res.particles_attack : MAIN_EFFECTS_ACTION.res.particles_attack_ie;
@@ -264,7 +265,7 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
             _a3 = cc.cardinalSplineTo(action_time, _path_array, .9);
 
         if (this._webgl) {
-            var _streak = new cc.MotionStreak(.7, .5, 2, cc.color(255, 255, 255), MAIN_EFFECTS_ACTION.res.s_streak);
+            var _streak = new cc.MotionStreak(.7, .5, 2, cc.color(5, 240, 250), MAIN_EFFECTS_ACTION.res.s_streak);
             _streak.setPosition(_action_pos_start);
             this.addChild(_streak, 2);
 
@@ -288,12 +289,6 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
                 target = null;
             }))
         );
-
-        // if (this._pos_start_pointer === this._pos_start_array.length - 1) {
-        //     this._pos_start_pointer = 0;
-        // } else {
-        //     this._pos_start_pointer += 1;
-        // }
         _emitter = null;
     },
     /**

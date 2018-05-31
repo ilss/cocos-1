@@ -1,7 +1,7 @@
 MAIN_EFFECTS_ACTION.res = {
     game_tree: "res/img/flag_tree.png",
     game_bg_light: "res/img/flag_bg_light.png",
-    game_bg_light_buttom: "res/img/flag_bg_light_buttom.png",
+    game_bg_light_bottom: "res/img/flag_bg_light_bottom.png",
     particles_attack: "res/img/particle.plist",
     particles_attack_ie: "res/img/particle_ie.plist",
     particle_hit: "res/plist/particle_hit.plist",

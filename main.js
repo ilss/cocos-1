@@ -70,18 +70,15 @@ cc.game.onStart = function () {
         cc.view.enableAutoFullScreen(true);
     }
 
+    cc.Event._isStopped = true;
     // Adjust viewport meta
     cc.view.adjustViewPort(true);
 
-    // Uncomment the following line to set a fixed orientation for your game
-    // cc.view.setOrientation(cc.ORIENTATION_PORTRAIT);
+    cc.view.setDesignResolutionSize(1300, 860, cc.ResolutionPolicy.UNKNOWN);
 
-    // Setup the resolution policy and design resolution size
-    cc.view.setDesignResolutionSize(1072, 866, cc.ResolutionPolicy.UNKNOWN);
-
-    // The game will be resized when browser size change
     cc.view.resizeWithBrowserSize(true);
 
+    cc.director.setClearColor(cc.color(0, 0, 0, 0));
     //load resources
     cc.LoaderScene.preload(MAIN_EFFECTS_ACTION.g_resources, function () {
         document.getElementById('gameCanvas').style.display = 'inline';

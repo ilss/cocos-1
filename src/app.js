@@ -13,8 +13,16 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
     _webgl: true,
     _target: null,
     _streak: null,
+    _item_index: 0,
     _dt: 0,
-    _pos_start_array: [],
+    _team_array: [],
+    _pos_start_array: [
+        cc.p(250, 770), cc.p(1048, 770),
+        cc.p(174, 598), cc.p(1128, 598),
+        cc.p(92, 424), cc.p(1214, 424),
+        cc.p(174, 252), cc.p(1128, 252),
+        cc.p(250, 78), cc.p(1048, 78)
+    ],
     _pos_end_array: [
         cc.p(371, 474),
         cc.p(428, 490),
@@ -39,22 +47,41 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
         ).repeatForever();
 
         this._webgl = 'opengl' in cc.sys.capabilities && cc._renderType === cc.game.RENDER_TYPE_WEBGL;
-
         this.addBg();
-        this.createStartPos(5, 215);
-        // this.scheduleUpdate();
+        this.addTree();
+        // this.createStartPos(5, 215);
+        this.initTeam();
+        //入场特效
+        // setInterval(this.teamEntrance.bind(this), 200);
     },
     addBg: function () {
-        var bg = new cc.Sprite(MAIN_EFFECTS_ACTION.res.game_bg);
-        this.addChild(bg, 0);
-        bg.x = this._winSize.width / 2;
-        bg.y = this._winSize.height / 2;
+        var _bg = new cc.Sprite(MAIN_EFFECTS_ACTION.res.game_bg_light);
+        this.addChild(_bg, 1);
+        _bg.x = this._winSize.width / 2;
+        _bg.y = this._winSize.height / 2;
+        _bg.opacity = 0;
+        _bg.runAction(cc.sequence(cc.fadeIn(2), cc.fadeOut(2)).repeatForever());
 
-        bg = new cc.Sprite(MAIN_EFFECTS_ACTION.res.game_bg_mask);
-        this.addChild(bg, 99);
-        bg.x = this._winSize.width / 2;
-        bg.y = this._winSize.height / 2;
-        bg = null;
+        _bg = new cc.Sprite(MAIN_EFFECTS_ACTION.res.game_bg_light_buttom);
+        this.addChild(_bg, 0);
+        _bg.x = this._winSize.width / 2;
+        _bg.y = this._winSize.height / 2;
+    },
+    addTree: function () {
+        var _tree = new cc.Sprite(MAIN_EFFECTS_ACTION.res.game_tree);
+        _tree.x = this._winSize.width / 2;
+        _tree.y = this._winSize.height / 2;
+        _tree.opacity = 0;
+        _tree.runAction(cc.fadeIn(1));
+        this.addChild(_tree);
+    },
+    initTeam: function () {
+        var _team = null;
+        for (var i = 0; i < 10; i++) {
+            _team = new Team_class('res/img/team_bg.png');
+            _team.setPosition(this._pos_start_array[i]);
+            this.addChild(_team, 2);
+        }
     },
     /**
      * 生成发射点坐标
@@ -75,6 +102,35 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
         }
         _pos_margin = null;
         _pos_sence_top = null;
+    },
+
+    teamEntrance: function () {
+        if (this._item_index === this._pos_start_array.length) {
+            return;
+        }
+        var _temp_height = this._winSize.height / 2;
+        var _pos = this._pos_start_array[this._item_index],
+            _team = new cc.Sprite(),
+            _size = _team.getContentSize(),
+            _action = cc.spawn(cc.delayTime(.5), cc.fadeIn(.5), cc.scaleTo(.5, 1, 1));
+        this.loadUrlImage('res/img/team_bg.png', _team);
+        _team.x = _pos.x;
+        _team.y = _pos.y < _temp_height ? _pos.y - _size.height / 2 : _pos.y + _size.height / 2 + 8;
+
+        _team.opacity = 0;
+        _team.setScale(0);
+        this.addChild(_team, 2);
+        _team.runAction(_action);
+        this.entranceAction(_team.getPosition());
+        this._item_index++;
+    },
+    entranceAction: function (_pos) {
+        var _emitter = new cc.ParticleSystem(MAIN_EFFECTS_ACTION.res.particle_fade_in);
+        _emitter.setScale(.5);
+        _emitter.x = _pos.x;
+        _emitter.y = _pos.y - 30;
+        _emitter.autoRemoveOnFinish = true;
+        this.addChild(_emitter, 3);
     },
     /**
      * @func

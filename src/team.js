@@ -9,12 +9,11 @@ var Team_class = cc.Node.extend({
     ctor: function (obj) {
         this._super();
         if (typeof obj !== 'object') {
-            cc.log('Team_class 参数必须是obj');
-            return;
+            cc.log('ERROR:  Team_class 参数必须是obj ！！！');
         }
         this._team_id = obj.id || '6666';
         this._team_name = obj.name || '战队';
-        this._team_icon = obj.url || '';
+        this._team_icon = obj.url || MAIN_EFFECTS_ACTION.res.team_icon_def;
         this.initTeam();
     },
     initTeam: function () {
@@ -35,16 +34,19 @@ var Team_class = cc.Node.extend({
     },
     loadUrlImage: function (faceurl, node) {
         // && (/^https?:\/\/\.+(.png|.gif|.jpe?g)$/g).test(url)
-        if (typeof faceurl === 'string' && (/(.png|.gif|.jpe?g)$/g).test(faceurl)) {
+        if (typeof faceurl === 'string' && (/(.png|.gif|.jpe?g)$/gi).test(faceurl)) {
             cc.loader.loadImg(faceurl, { isCrossOrigin: false }, function (err, img) {
                 if (err) {
                     cc.log("图片加载失败 " + err);
                 }
                 else {
-                    var sprite = new cc.Sprite(img);
-                    sprite.x = 0;
-                    sprite.y = 0;
-                    node.addChild(sprite);
+                    var _sp = new cc.Sprite(img),
+                        _size = _sp.getContentSize();
+
+                    _sp.setScale(37 / _size.width, 37 / _size.height);
+                    _sp.x = 0;
+                    _sp.y = 0;
+                    node.addChild(_sp);
                 }
             });
         } else {

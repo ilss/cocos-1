@@ -7,7 +7,8 @@ MAIN_EFFECTS_ACTION.res = {
     particle_hit: "res/plist/particle_hit.plist",
     particle_fade_in: "res/plist/particle_fadein.plist",
     s_streak: "res/img/r2.png",
-    team_bg: "res/img/team_bg.png"
+    team_bg: "res/img/team_photo_mask.png",
+    team_icon_def: "res/img/team_icon_def.png"
 };
 
 MAIN_EFFECTS_ACTION.g_resources = [];

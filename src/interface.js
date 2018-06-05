@@ -10,7 +10,7 @@
          */
         randomNum: function (minNum, maxNum) {
             if (typeof minNum !== 'number' || typeof minNum !== 'number') {
-                throw new Error('argument has to be Number')
+                throw new Error('argument has to be Number');
             }
             switch (arguments.length) {
                 case 1:
@@ -45,7 +45,7 @@
     /** @expose */
     function attackingAction (_pos_action_start, _pos_action_end, _action_time) {
         if (MAIN_EFFECTS_ACTION._EFFECTS_MAIN_LAYER === null) {
-            return;
+            throw new Error("MAIN_EFFECTS_ACTION._EFFECTS_MAIN_LAYER is null");
         }
         MAIN_EFFECTS_ACTION._EFFECTS_MAIN_LAYER.attackingAction(_pos_action_start, _pos_action_end, _action_time);
     }
@@ -57,11 +57,10 @@
      */
     function changeTeam (obj) {
         if (MAIN_EFFECTS_ACTION._EFFECTS_MAIN_LAYER === null) {
-            return;
+            throw new Error("MAIN_EFFECTS_ACTION._EFFECTS_MAIN_LAYER is null");
         }
         if (typeof obj !== 'object') {
-            throw new Error("changeTeam 参数 格式必须{id: '0001', name: '战队 A', url: 'res/img/team_bg.png'}")
-            return;
+            throw new Error("changeTeam 参数 格式必须{id: '0001', name: '战队 A', url: 'res/img/team_bg.png'}");
         }
         MAIN_EFFECTS_ACTION._EFFECTS_MAIN_LAYER.changeTeam(obj);
     }

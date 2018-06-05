@@ -15,15 +15,25 @@
             switch (arguments.length) {
                 case 1:
                     return parseInt(Math.random() * minNum + 1, 10);
-                    break;
                 case 2:
                     return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10);
-                    break;
                 default:
                     return 0;
-                    break;
             }
         },
+    }
+    /**
+     * @func
+     * @desc  初始化10只队伍
+     * @param {array} data_array  格式[{id: '0001', name: '战队 A', url: 'res/img/team_bg.png'},{id: '0002', name: '战队 B', url: 'res/img/team_bg.png'}]
+     * @returns 
+     */
+    function initTeam (data_array) {
+        if (data_array instanceof Array) {
+            MAIN_EFFECTS_ACTION._EFFECTS_MAIN_LAYER.changeTeam(obj);
+        } else {
+            throw new Error('changeTeam 参数必须为数组');
+        }
     }
     /**
         * @func 
@@ -42,7 +52,7 @@
     /**
      * @func
      * @desc  换队
-     * @param {any} obj  格式{team_id: '0001', team_img: 'res/img/team_bg.png', team_name: '战队 A'}
+     * @param {object} obj  格式{id: '0001', name: '战队 A', url: 'res/img/team_bg.png'}
      * @returns 
      */
     function changeTeam (obj) {
@@ -50,12 +60,13 @@
             return;
         }
         if (typeof obj !== 'object') {
-            cc.log('changeTeam 参数必须为 object')
+            throw new Error("changeTeam 参数 格式必须{id: '0001', name: '战队 A', url: 'res/img/team_bg.png'}")
             return;
         }
         MAIN_EFFECTS_ACTION._EFFECTS_MAIN_LAYER.changeTeam(obj);
     }
 
-    window["ATTCAKING_ACTION"] = attackingAction;
-    window["CHANGE_TEAM"] = changeTeam;
+    window["FLAG_INITTEAM"] = initTeam;
+    window["FLAG_ATTCAKING_ACTION"] = attackingAction;
+    window["FLAG_CHANGE_TEAM"] = changeTeam;
 }(window));

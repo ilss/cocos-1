@@ -4,7 +4,7 @@
     "showFPS": true,
     "frameRate": 60,
     "noCache": false,
-    "id": "gameCanvas",
+    "id": "actionEffectGameCanvas",
     "renderMode": 0,
     "engineDir": "frameworks/cocos2d-html5",
     "modules": [

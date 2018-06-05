@@ -5,7 +5,7 @@
              classpath="D:\cocos\cocos2d-x-3.16\tools\cocos2d-console\plugins\plugin_compile\build_web/bin/compiler-1.7.jar"/>
 
     <target name="compile">
-        <jscomp compilationLevel="simple" 
+        <jscomp compilationLevel="advanced" 
                 warning="quiet"
                 debug="false" 
                 output="D:\cocos\webone\publish\html5/game.min.js"
@@ -144,6 +144,7 @@
             <sources dir="${basedir}">
                 <file name="src/interface.js"/>
                 <file name="src/resource.js"/>
+                <file name="src/team.js"/>
                 <file name="src/app.js"/>
                 <file name="main.js"/>
 

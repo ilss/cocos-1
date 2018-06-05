@@ -81,7 +81,7 @@ cc.game.onStart = function () {
     cc.director.setClearColor(cc.color(0, 0, 0, 0));
     //load resources
     cc.LoaderScene.preload(MAIN_EFFECTS_ACTION.g_resources, function () {
-        document.getElementById('gameCanvas').style.display = 'inline';
+        document.getElementById('actionEffectGameCanvas').style.display = 'inline';
         cc.director.runScene(new MAIN_EFFECTS_ACTION.HelloWorldScene());
     }, this);
 };

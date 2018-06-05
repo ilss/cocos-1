@@ -58,6 +58,19 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
         MAIN_EFFECTS_ACTION._EFFECTS_MAIN_LAYER = this;
         this._winSize = cc.director.getWinSize();
 
+        var _json = [
+            { id: '0001', name: '战队001', url: '' },
+            { id: '0002', name: '战队002', url: '' },
+            { id: '0003', name: '战队003', url: '' },
+            { id: '0004', name: '战队004', url: '' },
+            { id: '0005', name: '战队005', url: '' },
+            { id: '0006', name: '战队006', url: '' },
+            { id: '0007', name: '战队007', url: '' },
+            { id: '0008', name: '战队008', url: '' },
+            { id: '0009', name: '战队009', url: '' },
+            { id: '0010', name: '战队010', url: '' }
+        ];
+
         this._color_action = cc.sequence(
             cc.tintTo(.52, 19, 40, 60),
             cc.tintTo(.2, 255, 255, 255)
@@ -66,8 +79,7 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
         this._webgl = 'opengl' in cc.sys.capabilities && cc._renderType === cc.game.RENDER_TYPE_WEBGL;
         this.addBg();
         this.addTree();
-        // this.createStartPos(5, 215);
-        this.initTeam();
+        this.initTeam(_json);
         //入场特效
         // setInterval(this.teamEntrance.bind(this), 200);
     },
@@ -92,14 +104,10 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
         _tree.runAction(cc.fadeIn(1));
         this.addChild(_tree);
     },
-    initTeam: function () {
-        var _team = null,
-            obj = {};
-        for (var i = 0; i < 10; i++) {
-            obj.url = 'res/img/team_bg.png';
-            obj.id = '0001';
-            obj.name = '战队 ' + i;
-            _team = new Team_class(obj);
+    initTeam: function (data_array) {
+        var _team = null;
+        for (var i = 0, _len = data_array.length; i < _len; i++) {
+            _team = new Team_class(data_array[i]);
             _team.setPosition(this._pos_start_array[i]);
             this.addChild(_team, 2);
             this._team_array.push(_team);

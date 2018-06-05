@@ -9,7 +9,7 @@ var Team_class = cc.Node.extend({
     ctor: function (obj) {
         this._super();
         if (typeof obj !== 'object') {
-            cc.log('ERROR:  Team_class 参数必须是obj ！！！');
+            throw new Error('ERROR:  Team_class 参数必须是obj ！！！');
         }
         this._team_id = obj.id || '6666';
         this._team_name = obj.name || '战队';

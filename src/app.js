@@ -87,14 +87,15 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
         var _bg = new cc.Sprite(MAIN_EFFECTS_ACTION.res.game_bg_light);
         this.addChild(_bg, 1);
         _bg.x = this._winSize.width / 2;
-        _bg.y = this._winSize.height / 2;
+        _bg.y = this._winSize.height / 2 - 20;
         _bg.opacity = 0;
         _bg.runAction(cc.sequence(cc.fadeIn(2), cc.fadeOut(2)).repeatForever());
 
         _bg = new cc.Sprite(MAIN_EFFECTS_ACTION.res.game_bg_light_bottom);
         this.addChild(_bg, 0);
         _bg.x = this._winSize.width / 2;
-        _bg.y = this._winSize.height / 2;
+        _bg.y = this._winSize.height / 2 - 20;
+        _bg.runAction(cc.sequence(cc.fadeOut(2), cc.fadeIn(2)).repeatForever());
     },
     addTree: function () {
         var _tree = new cc.Sprite(MAIN_EFFECTS_ACTION.res.game_tree);

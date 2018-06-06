@@ -13,7 +13,7 @@ var Team_class = cc.Node.extend({
         }
         this._team_id = obj.id || '6666';
         this._team_name = obj.name || '战队';
-        this._team_icon = obj.url || MAIN_EFFECTS_ACTION.res.team_icon_def;
+        this._team_icon = obj.icon || MAIN_EFFECTS_ACTION.res.team_icon_def;
         this.initTeam();
     },
     initTeam: function () {
@@ -56,7 +56,7 @@ var Team_class = cc.Node.extend({
     changeTeam: function (obj) {
         this._team_id = obj.id || '6666';
         this._team_name = obj.name || '战队';
-        this._team_icon = obj.url || '';
+        this._team_icon = obj.icon || '';
         var _this = this;
         this._sp.runAction(cc.sequence(cc.fadeOut(this._opactions._fade_time), cc.callFunc(
             function () {

@@ -326,10 +326,8 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
 });
 
 MAIN_EFFECTS_ACTION.HelloWorldScene = cc.Scene.extend({
-    _main_layer: null,
     onEnter: function () {
         this._super();
-        _main_layer = new MAIN_EFFECTS_ACTION.MotionStreakTest1();
-        this.addChild(_main_layer);
+        this.addChild(new MAIN_EFFECTS_ACTION.MotionStreakTest1());
     }
 });

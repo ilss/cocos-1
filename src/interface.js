@@ -25,7 +25,7 @@
     /**
      * @func
      * @desc  初始化10只队伍
-     * @param {array} data_array  格式[{id: '0001', name: '战队 A', url: 'res/img/team_bg.png'},{id: '0002', name: '战队 B', url: 'res/img/team_bg.png'}]
+     * @param {array} data_array  格式[{id: '0001', name: '战队 A', url: 'res/img/team_bg.png'},{id: '0002', name: '战队 B', icon: 'res/img/team_bg.png'}]
      * @returns 
      */
     function initTeam (data_array) {
@@ -52,7 +52,7 @@
     /**
      * @func
      * @desc  换队
-     * @param {object} obj  格式{id: '0001', name: '战队 A', url: 'res/img/team_bg.png'}
+     * @param {object} obj  格式{id: '0001', name: '战队 A', icon: 'res/img/team_bg.png'}
      * @returns 
      */
     function changeTeam (obj) {
@@ -60,7 +60,7 @@
             throw new Error("MAIN_EFFECTS_ACTION._EFFECTS_MAIN_LAYER is null");
         }
         if (typeof obj !== 'object') {
-            throw new Error("changeTeam 参数 格式必须{id: '0001', name: '战队 A', url: 'res/img/team_bg.png'}");
+            throw new Error("changeTeam 参数 格式必须{id: '0001', name: '战队 A', icon: 'res/img/team_bg.png'}");
         }
         MAIN_EFFECTS_ACTION._EFFECTS_MAIN_LAYER.changeTeam(obj);
     }

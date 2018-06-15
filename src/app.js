@@ -5,11 +5,14 @@
  * @LastEditTime: 2018-05-31 15:10:04
  * @Description: 
  */
-MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
+
+MAIN_EFFECTS_ACTION.MainLayer = cc.Layer.extend({
     _opactions: {
-        _default_action_time: 4
+        _default_action_time: 4,
+        _linghting_color: cc.color(0, 140, 250)
     },
     _winSize: null,
+    _global_class: null,
     _color_action: null,
     _webgl: true,
     _target: null,
@@ -18,6 +21,42 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
     _dt: 0,
     _team_array: [],
     _team_change_index: 0,
+    _linghting_path_left_array: [
+        [
+            [MAIN_EFFECTS_ACTION.res.bg_linghting_annulus, cc.p(0, 788), cc.p(454, 788), cc.p(567, 676), cc.p(581, 676), cc.p(598, 693), cc.p(617, 693)],
+            [MAIN_EFFECTS_ACTION.res.bg_linghting_point, cc.p(0, 780), cc.p(448, 780), cc.p(563, 665), cc.p(594, 665)],
+            [MAIN_EFFECTS_ACTION.res.bg_linghting_annulus, cc.p(0, 772), cc.p(443, 772), cc.p(567, 647), cc.p(616, 647), cc.p(633, 666)]
+        ],
+        [
+            [MAIN_EFFECTS_ACTION.res.bg_linghting_annulus, cc.p(0, 719), cc.p(164, 719), cc.p(312, 569), cc.p(366, 569), cc.p(385, 584), cc.p(408, 584), cc.p(446, 546)],
+            [MAIN_EFFECTS_ACTION.res.bg_linghting_point, cc.p(0, 730), cc.p(169, 730), cc.p(317, 582), cc.p(366, 582), cc.p(380, 598), cc.p(417, 598), cc.p(440, 574), cc.p(464, 574)],
+            [MAIN_EFFECTS_ACTION.res.bg_linghting_annulus, cc.p(0, 731), cc.p(174, 731), cc.p(324, 591), cc.p(361, 591), cc.p(377, 607), cc.p(451, 607), cc.p(467, 591)]
+        ],
+        [
+            [MAIN_EFFECTS_ACTION.res.bg_linghting_annulus, cc.p(0, 576), cc.p(199, 576), cc.p(275, 500), cc.p(318, 500)],
+            [MAIN_EFFECTS_ACTION.res.bg_linghting_point, cc.p(0, 566), cc.p(197, 566), cc.p(270, 492), cc.p(290, 492), cc.p(305, 476), cc.p(333, 476)]
+        ],
+        [
+            [MAIN_EFFECTS_ACTION.res.bg_linghting_annulus, cc.p(0, 436), cc.p(339, 436), cc.p(368, 465), cc.p(381, 465)],
+            [MAIN_EFFECTS_ACTION.res.bg_linghting_annulus, cc.p(0, 420), cc.p(340, 423), cc.p(352, 412), cc.p(391, 412)],
+            [MAIN_EFFECTS_ACTION.res.bg_linghting_annulus, cc.p(0, 413), cc.p(338, 413), cc.p(368, 387), cc.p(382, 387)]
+        ],
+        [
+            [MAIN_EFFECTS_ACTION.res.bg_linghting_point, cc.p(0, 286), cc.p(197, 286), cc.p(270, 360), cc.p(290, 360), cc.p(305, 375), cc.p(333, 375)],
+            [MAIN_EFFECTS_ACTION.res.bg_linghting_annulus, cc.p(0, 278), cc.p(199, 278), cc.p(275, 352), cc.p(318, 352)]
+        ],
+        [
+            [MAIN_EFFECTS_ACTION.res.bg_linghting_annulus, cc.p(0, 128), cc.p(164, 128), cc.p(312, 276), cc.p(366, 276), cc.p(385, 263), cc.p(408, 263), cc.p(448, 303)],
+            [MAIN_EFFECTS_ACTION.res.bg_linghting_point, cc.p(0, 117), cc.p(169, 117), cc.p(317, 265), cc.p(366, 265), cc.p(380, 250), cc.p(417, 250), cc.p(440, 273), cc.p(462, 273)],
+            [MAIN_EFFECTS_ACTION.res.bg_linghting_annulus, cc.p(0, 106), cc.p(174, 106), cc.p(324, 256), cc.p(361, 256), cc.p(377, 240), cc.p(451, 240), cc.p(467, 256)]
+        ],
+        [
+            [MAIN_EFFECTS_ACTION.res.bg_linghting_annulus, cc.p(0, 80), cc.p(443, 80), cc.p(567, 205), cc.p(616, 205), cc.p(633, 187)],
+            [MAIN_EFFECTS_ACTION.res.bg_linghting_point, cc.p(0, 72), cc.p(448, 72), cc.p(563, 187), cc.p(595, 187)],
+            [MAIN_EFFECTS_ACTION.res.bg_linghting_annulus, cc.p(0, 65), cc.p(456, 65), cc.p(567, 177), cc.p(581, 177), cc.p(598, 159), cc.p(618, 159)]
+        ],
+    ],
+    _linghting_path_right_array: null,
     _pos_start_array: [
         cc.p(250, 770),
         cc.p(174, 598),
@@ -59,16 +98,16 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
         this._winSize = cc.director.getWinSize();
 
         var _json = [
-            { id: '0001', name: '战队001', url: '' },
-            { id: '0002', name: '战队002', url: '' },
-            { id: '0003', name: '战队003', url: '' },
-            { id: '0004', name: '战队004', url: '' },
-            { id: '0005', name: '战队005', url: '' },
-            { id: '0006', name: '战队006', url: '' },
-            { id: '0007', name: '战队007', url: '' },
-            { id: '0008', name: '战队008', url: '' },
-            { id: '0009', name: '战队009', url: '' },
-            { id: '0010', name: '战队010', url: '' }
+            { group_id: '0001', group_name: '默认空位', group_icon: '' },
+            { group_id: '0002', group_name: '默认空位', group_icon: '' },
+            { group_id: '0003', group_name: '默认空位', group_icon: '' },
+            { group_id: '0004', group_name: '默认空位', group_icon: '' },
+            { group_id: '0005', group_name: '默认空位', group_icon: '' },
+            { group_id: '0006', group_name: '默认空位', group_icon: '' },
+            { group_id: '0007', group_name: '默认空位', group_icon: '' },
+            { group_id: '0008', group_name: '默认空位', group_icon: '' },
+            { group_id: '0009', group_name: '默认空位', group_icon: '' },
+            { group_id: '0010', group_name: '默认空位', group_icon: '' }
         ];
 
         this._color_action = cc.sequence(
@@ -80,22 +119,111 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
         this.addBg();
         this.addTree();
         this.initTeam(_json);
+
+        // var _bg_color = new cc.LayerColor(cc.color(0, 0, 0), this._winSize.width, this._winSize.height);
+        // this.addChild(_bg_color);
         //入场特效
         // setInterval(this.teamEntrance.bind(this), 200);
     },
     addBg: function () {
-        var _bg = new cc.Sprite(MAIN_EFFECTS_ACTION.res.game_bg_light);
-        this.addChild(_bg, 1);
-        _bg.x = this._winSize.width / 2;
-        _bg.y = this._winSize.height / 2 - 20;
-        _bg.opacity = 0;
-        _bg.runAction(cc.sequence(cc.fadeIn(2), cc.fadeOut(2)).repeatForever());
-
-        _bg = new cc.Sprite(MAIN_EFFECTS_ACTION.res.game_bg_light_bottom);
+        var _this = this,
+            _bg = new cc.Sprite(MAIN_EFFECTS_ACTION.res.game_bg_light_bottom);
         this.addChild(_bg, 0);
         _bg.x = this._winSize.width / 2;
         _bg.y = this._winSize.height / 2 - 20;
-        _bg.runAction(cc.sequence(cc.fadeOut(2), cc.fadeIn(2)).repeatForever());
+        _bg.runAction(cc.sequence(cc.fadeOut(1), cc.delayTime(3), cc.fadeIn(4)).repeatForever());
+
+        _bg = new cc.Sprite(MAIN_EFFECTS_ACTION.res.game_bg_light);
+        this.addChild(_bg, 1);
+        _bg.x = this._winSize.width / 2;
+        _bg.y = this._winSize.height / 2 - 20;
+        _bg.opacity = 80;
+        // _bg.runAction(cc.sequence(cc.fadeIn(2), cc.fadeOut(2)).repeatForever());
+
+        //流光效果  START
+        //左侧路径坐标数组翻转生成右侧
+        this._linghting_path_right_array = [];
+        for (var _i = 0, _len_i = this._linghting_path_left_array.length; _i < _len_i; _i++) {
+            var _new_array_i = [],
+                _array_i = this._linghting_path_left_array[_i];
+            for (var _j = 0, _len_j = _array_i.length; _j < _len_j; _j++) {
+                var _new_array_j = [],
+                    _array_j = _array_i[_j];
+                _new_array_j.push(_array_j[0]);
+                for (var _k = 1, _len_k = _array_j.length; _k < _len_k; _k++) {
+                    var _element = _array_j[_k];
+                    var _new_pos = cc.p(1286 - _element.x, _element.y);
+                    _new_array_j.push(_new_pos);
+                }
+                _new_array_i.push(_new_array_j);
+            }
+            this._linghting_path_right_array.push(_new_array_i);
+        }
+
+        // cc.log(this._linghting_path_left_array);
+        function spriteMovePath (sp, path_array, speed) {
+            var _icon = null,
+                _start_pos = sp.getPosition(),
+                _end_pos = null,
+                _action_array = [],
+                _action_time = 0,
+                _action_time_all = 0,
+                _action = null;
+            for (var _i = 1, _len = path_array.length; _i < _len; _i++) {
+                _end_pos = path_array[_i];
+                _action_time = GLOBAL_FUNC_SIMPLEEDU["distanceToActionTime"](_start_pos, _end_pos, speed);
+                _action = cc.moveTo(_action_time, _end_pos);
+                _action_time_all += _action_time;
+                _action_array.push(_action);
+                _start_pos = _end_pos;
+            }
+            sp.runAction(cc.sequence(_action_array));
+            _icon = new cc.Sprite(path_array[0]);
+            _icon.setPosition(path_array[_len - 1]);
+            _icon.opacity = 0;
+            _this.addChild(_icon, 1);
+            _icon.runAction(
+                cc.sequence(
+                    cc.delayTime(_action_time_all),
+                    cc.fadeIn(.2),
+                    cc.delayTime(.5),
+                    cc.fadeOut(.2),
+                    cc.callFunc(
+                        function (icon) {
+                            icon.removeFromParent();
+                        }
+                    )
+                )
+            );
+        }
+
+        function bglinghting () {
+            var _path_array = _this._linghting_path_left_array[MAIN_EFFECTS_ACTION.randomNum(0, _this._linghting_path_left_array.length - 1)],
+                _path = _path_array[MAIN_EFFECTS_ACTION.randomNum(0, _path_array.length - 1)],
+                _streak = new cc.MotionStreak(1, 0.1, 1, _this._opactions._linghting_color, MAIN_EFFECTS_ACTION.res.s_streak);
+            //去掉数组第一个图标元素
+            _streak.setPosition(_path[1]);
+            _this.addChild(_streak, 2);
+            spriteMovePath(_streak, _path, 100);
+
+            _path_array = _this._linghting_path_right_array[MAIN_EFFECTS_ACTION.randomNum(0, _this._linghting_path_right_array.length - 1)];
+            _path = _path_array[MAIN_EFFECTS_ACTION.randomNum(0, _path_array.length - 1)];
+            _streak = new cc.MotionStreak(1.5, 0.1, 1, _this._opactions._linghting_color, MAIN_EFFECTS_ACTION.res.s_streak);
+            _streak.setPosition(_path[1]);
+            _this.addChild(_streak, 2);
+            spriteMovePath(_streak, _path, 100);
+        }
+
+        this.schedule(bglinghting, .5, Infinity, 2);
+        //流光效果  END
+
+        // var _path_array = [cc.p(340, 423), cc.p(352, 412), cc.p(389, 412)],
+        //     _streak = new cc.MotionStreak(2, .5, 1, cc.color(5, 240, 250), MAIN_EFFECTS_ACTION.res.s_streak);
+        // _streak.x = 0;
+        // _streak.y = 420;
+        // this.addChild(_streak, 2);
+        // GLOBAL_FUNC_SIMPLEEDU["spriteMovePath"](_streak, _path_array, 300);
+        // this._global_class.spriteMovePath(_emitter, _path_array, 200);
     },
     addTree: function () {
         var _tree = new cc.Sprite(MAIN_EFFECTS_ACTION.res.game_tree);
@@ -228,6 +356,10 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
         _pos_array.push(_pos_end);
         return _pos_array;
     },
+    teamAttackTree: function (team_data) {
+        var _team = this._team_array[GLOBAL_FUNC_SIMPLEEDU.findObjFromArray(team_data, 'group_id', this._team_array, '_team_id')];
+        this.attackingAction(_team.getPosition());
+    },
     /**
      * @func 
      * @desc 向舞台添加攻击特效
@@ -328,6 +460,6 @@ MAIN_EFFECTS_ACTION.MotionStreakTest1 = cc.Layer.extend({
 MAIN_EFFECTS_ACTION.HelloWorldScene = cc.Scene.extend({
     onEnter: function () {
         this._super();
-        this.addChild(new MAIN_EFFECTS_ACTION.MotionStreakTest1());
+        this.addChild(new MAIN_EFFECTS_ACTION.MainLayer());
     }
 });

@@ -11,9 +11,9 @@ var Team_class = cc.Node.extend({
         if (typeof obj !== 'object') {
             throw new Error('ERROR:  Team_class 参数必须是obj ！！！');
         }
-        this._team_id = obj.id || '6666';
-        this._team_name = obj.name || '战队';
-        this._team_icon = obj.icon || MAIN_EFFECTS_ACTION.res.team_icon_def;
+        this._team_id = obj.group_id || '6666';
+        this._team_name = obj.group_name || '战队';
+        this._team_icon = obj.group_icon;
         this.initTeam();
     },
     initTeam: function () {
@@ -26,11 +26,15 @@ var Team_class = cc.Node.extend({
 
         this.loadUrlImage(this._team_icon, this._sp);
 
-        var _txt = new cc.LabelTTF(this._team_name, 10);
-        _txt.setFontFillColor(cc.color(7, 230, 230));
-        _txt.y = 55;
-        this._sp.addChild(_txt, 1);
-        this._sp.runAction(cc.fadeIn(this._opactions._fade_time));
+        if (this._team_name !== '默认空位') {
+            var _txt = new cc.LabelTTF(this._team_name, 10);
+            _txt.setFontFillColor(cc.color(7, 230, 230));
+            _txt.y = 55;
+            this._sp.addChild(_txt, 1);
+            this._sp.runAction(cc.fadeIn(this._opactions._fade_time));
+        } else {
+            this._sp.runAction(cc.sequence(cc.fadeIn(1), cc.delayTime(1), cc.fadeOut(2)).repeatForever());
+        }
     },
     loadUrlImage: function (faceurl, node) {
         // && (/^https?:\/\/\.+(.png|.gif|.jpe?g)$/g).test(url)
@@ -42,7 +46,6 @@ var Team_class = cc.Node.extend({
                 else {
                     var _sp = new cc.Sprite(img),
                         _size = _sp.getContentSize();
-
                     _sp.setScale(37 / _size.width, 37 / _size.height);
                     _sp.x = 0;
                     _sp.y = 0;
@@ -50,13 +53,13 @@ var Team_class = cc.Node.extend({
                 }
             });
         } else {
-            cc.log("图片url错误 ");
+            cc.log("图片url错误 " + faceurl);
         }
     },
     changeTeam: function (obj) {
-        this._team_id = obj.id || '6666';
-        this._team_name = obj.name || '战队';
-        this._team_icon = obj.icon || '';
+        this._team_id = obj.group_id || '6666';
+        this._team_name = obj.group_name || '战队';
+        this._team_icon = obj.group_icon || '';
         var _this = this;
         this._sp.runAction(cc.sequence(cc.fadeOut(this._opactions._fade_time), cc.callFunc(
             function () {

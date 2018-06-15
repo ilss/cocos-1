@@ -1,5 +1,7 @@
 MAIN_EFFECTS_ACTION.res = {
     game_tree: "res/img/flag_tree.png",
+    bg_linghting_point: "res/img/bg_linghting_point.png",
+    bg_linghting_annulus: "res/img/bg_linghting_annulus.png",
     game_bg_light: "res/img/flag_bg_light.png",
     game_bg_light_bottom: "res/img/flag_bg_light_bottom.png",
     particles_attack: "res/img/particle.plist",

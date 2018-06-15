@@ -93,7 +93,7 @@
 <body>
   <div id="actionEffect">
     <canvas id="actionEffectGameCanvas" width="1300" height="860"></canvas>
-    <button onclick='FLAG_ATTCAKING_ACTION(3)' style="width: 300px; height: 60px; margin: 0px auto 0px -330px; z-index: 9; position: absolute; bottom: 0;">攻 击</button>
+    <button onclick='MAIN_EFFECTS_ACTION.FLAG_TEAMATTACKTREE({group_id: "00103" })' style="width: 300px; height: 60px; margin: 0px auto 0px -330px; z-index: 9; position: absolute; bottom: 0;">攻 击</button>
     <button id="change_team_btn" name="aaa" style="width: 300px; height: 60px; margin: 0px auto 0px 30px; z-index: 9; position: absolute; bottom: 0;">换 队</button>
   </div>
   <!-- <script src="res/loading.js"></script> -->
@@ -103,7 +103,7 @@
     // setInterval(function () { ATTCAKING_ACTION(3); }, 100);
     var btn = document.querySelector("#change_team_btn");
     btn.onclick = function () {
-      FLAG_CHANGE_TEAM({ id: '00103', name: '战队' + Math.floor(Math.random() * 100), icon: 'res/img/team/34234.jpg' });
+      MAIN_EFFECTS_ACTION.FLAG_CHANGE_TEAM({ group_id: '00103', group_name: '战队' + Math.floor(Math.random() * 100), group_icon: 'res/img/team/34234.jpg' });
     }
   </script>
 </body>

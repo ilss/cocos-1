@@ -196,6 +196,7 @@ MAIN_EFFECTS_ACTION.MainLayer = cc.Layer.extend({
                     cc.fadeIn(.2),
                     cc.delayTime(.5),
                     cc.fadeOut(.2),
+                    cc.delayTime(1),
                     cc.callFunc(
                         function (target) {
                             target.removeFromParent();

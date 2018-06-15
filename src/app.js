@@ -9,7 +9,9 @@
 MAIN_EFFECTS_ACTION.MainLayer = cc.Layer.extend({
     _opactions: {
         _default_action_time: 4,
-        _linghting_color: cc.color(0, 140, 250)
+        _add_linghting_interval: 1,
+        _linghting_width: 2,
+        _linghting_color: cc.color(0, 0, 0)
     },
     _winSize: null,
     _global_class: null,
@@ -28,13 +30,13 @@ MAIN_EFFECTS_ACTION.MainLayer = cc.Layer.extend({
             [MAIN_EFFECTS_ACTION.res.bg_linghting_annulus, cc.p(0, 772), cc.p(443, 772), cc.p(567, 647), cc.p(616, 647), cc.p(633, 666)]
         ],
         [
-            [MAIN_EFFECTS_ACTION.res.bg_linghting_annulus, cc.p(0, 719), cc.p(164, 719), cc.p(312, 569), cc.p(366, 569), cc.p(385, 584), cc.p(408, 584), cc.p(446, 546)],
+            [MAIN_EFFECTS_ACTION.res.bg_linghting_annulus, cc.p(0, 731), cc.p(174, 731), cc.p(324, 591), cc.p(361, 591), cc.p(377, 607), cc.p(451, 607), cc.p(468, 589)],
             [MAIN_EFFECTS_ACTION.res.bg_linghting_point, cc.p(0, 730), cc.p(169, 730), cc.p(317, 582), cc.p(366, 582), cc.p(380, 598), cc.p(417, 598), cc.p(440, 574), cc.p(464, 574)],
-            [MAIN_EFFECTS_ACTION.res.bg_linghting_annulus, cc.p(0, 731), cc.p(174, 731), cc.p(324, 591), cc.p(361, 591), cc.p(377, 607), cc.p(451, 607), cc.p(467, 591)]
+            [MAIN_EFFECTS_ACTION.res.bg_linghting_annulus, cc.p(0, 719), cc.p(164, 719), cc.p(312, 569), cc.p(366, 569), cc.p(385, 584), cc.p(408, 584), cc.p(447, 545)]
         ],
         [
             [MAIN_EFFECTS_ACTION.res.bg_linghting_annulus, cc.p(0, 576), cc.p(199, 576), cc.p(275, 500), cc.p(318, 500)],
-            [MAIN_EFFECTS_ACTION.res.bg_linghting_point, cc.p(0, 566), cc.p(197, 566), cc.p(270, 492), cc.p(290, 492), cc.p(305, 476), cc.p(333, 476)]
+            [MAIN_EFFECTS_ACTION.res.bg_linghting_point, cc.p(0, 566), cc.p(197, 566), cc.p(270, 492), cc.p(290, 492), cc.p(305, 476), cc.p(335, 476)]
         ],
         [
             [MAIN_EFFECTS_ACTION.res.bg_linghting_annulus, cc.p(0, 436), cc.p(339, 436), cc.p(368, 465), cc.p(381, 465)],
@@ -42,7 +44,7 @@ MAIN_EFFECTS_ACTION.MainLayer = cc.Layer.extend({
             [MAIN_EFFECTS_ACTION.res.bg_linghting_annulus, cc.p(0, 413), cc.p(338, 413), cc.p(368, 387), cc.p(382, 387)]
         ],
         [
-            [MAIN_EFFECTS_ACTION.res.bg_linghting_point, cc.p(0, 286), cc.p(197, 286), cc.p(270, 360), cc.p(290, 360), cc.p(305, 375), cc.p(333, 375)],
+            [MAIN_EFFECTS_ACTION.res.bg_linghting_point, cc.p(0, 286), cc.p(197, 286), cc.p(270, 360), cc.p(290, 360), cc.p(305, 375), cc.p(335, 375)],
             [MAIN_EFFECTS_ACTION.res.bg_linghting_annulus, cc.p(0, 278), cc.p(199, 278), cc.p(275, 352), cc.p(318, 352)]
         ],
         [
@@ -63,7 +65,6 @@ MAIN_EFFECTS_ACTION.MainLayer = cc.Layer.extend({
         cc.p(92, 424),
         cc.p(174, 252),
         cc.p(250, 78),
-
         cc.p(1048, 78),
         cc.p(1128, 252),
         cc.p(1214, 424),
@@ -177,11 +178,18 @@ MAIN_EFFECTS_ACTION.MainLayer = cc.Layer.extend({
                 _action_array.push(_action);
                 _start_pos = _end_pos;
             }
+            var _color_action = cc.sequence(
+                cc.tintTo(1, 0, 58, 86),
+                cc.tintTo(1, 62, 225, 225)
+            ).repeatForever();
+
             sp.runAction(cc.sequence(_action_array));
+            sp.runAction(_color_action);
+
             _icon = new cc.Sprite(path_array[0]);
             _icon.setPosition(path_array[_len - 1]);
             _icon.opacity = 0;
-            _this.addChild(_icon, 1);
+            _this.addChild(_icon, 2);
             _icon.runAction(
                 cc.sequence(
                     cc.delayTime(_action_time_all),
@@ -189,8 +197,11 @@ MAIN_EFFECTS_ACTION.MainLayer = cc.Layer.extend({
                     cc.delayTime(.5),
                     cc.fadeOut(.2),
                     cc.callFunc(
-                        function (icon) {
-                            icon.removeFromParent();
+                        function (target) {
+                            target.removeFromParent();
+                            target = null;
+                            sp.removeFromParent();
+                            sp = null;
                         }
                     )
                 )
@@ -200,7 +211,7 @@ MAIN_EFFECTS_ACTION.MainLayer = cc.Layer.extend({
         function bglinghting () {
             var _path_array = _this._linghting_path_left_array[MAIN_EFFECTS_ACTION.randomNum(0, _this._linghting_path_left_array.length - 1)],
                 _path = _path_array[MAIN_EFFECTS_ACTION.randomNum(0, _path_array.length - 1)],
-                _streak = new cc.MotionStreak(1, 0.1, 1, _this._opactions._linghting_color, MAIN_EFFECTS_ACTION.res.s_streak);
+                _streak = new cc.MotionStreak(1, 0.1, _this._opactions._linghting_width, _this._opactions._linghting_color, MAIN_EFFECTS_ACTION.res.s_streak);
             //去掉数组第一个图标元素
             _streak.setPosition(_path[1]);
             _this.addChild(_streak, 2);
@@ -208,13 +219,13 @@ MAIN_EFFECTS_ACTION.MainLayer = cc.Layer.extend({
 
             _path_array = _this._linghting_path_right_array[MAIN_EFFECTS_ACTION.randomNum(0, _this._linghting_path_right_array.length - 1)];
             _path = _path_array[MAIN_EFFECTS_ACTION.randomNum(0, _path_array.length - 1)];
-            _streak = new cc.MotionStreak(1.5, 0.1, 1, _this._opactions._linghting_color, MAIN_EFFECTS_ACTION.res.s_streak);
+            _streak = new cc.MotionStreak(1.5, 0.1, _this._opactions._linghting_width, _this._opactions._linghting_color, MAIN_EFFECTS_ACTION.res.s_streak);
             _streak.setPosition(_path[1]);
             _this.addChild(_streak, 2);
             spriteMovePath(_streak, _path, 100);
         }
 
-        this.schedule(bglinghting, .5, Infinity, 2);
+        this.schedule(bglinghting, this._opactions._add_linghting_interval, Infinity, 2);
         //流光效果  END
 
         // var _path_array = [cc.p(340, 423), cc.p(352, 412), cc.p(389, 412)],
@@ -238,7 +249,7 @@ MAIN_EFFECTS_ACTION.MainLayer = cc.Layer.extend({
         for (var i = 0, _len = data_array.length; i < _len; i++) {
             _team = new Team_class(data_array[i]);
             _team.setPosition(this._pos_start_array[i]);
-            this.addChild(_team, 2);
+            this.addChild(_team, 5);
             this._team_array.push(_team);
         }
     },
@@ -451,9 +462,6 @@ MAIN_EFFECTS_ACTION.MainLayer = cc.Layer.extend({
     changeTeam: function (obj) {
         this._team_array[this._team_change_index].changeTeam(obj);
         this._team_change_index = this._team_change_index < 9 ? this._team_change_index + 1 : 0;
-    },
-    update: function (dt) {
-
     }
 });
 

@@ -98,19 +98,6 @@ MAIN_EFFECTS_ACTION.MainLayer = cc.Layer.extend({
         MAIN_EFFECTS_ACTION._EFFECTS_MAIN_LAYER = this;
         this._winSize = cc.director.getWinSize();
 
-        var _json = [
-            { group_id: '0001', group_name: '默认空位', group_icon: '' },
-            { group_id: '0002', group_name: '默认空位', group_icon: '' },
-            { group_id: '0003', group_name: '默认空位', group_icon: '' },
-            { group_id: '0004', group_name: '默认空位', group_icon: '' },
-            { group_id: '0005', group_name: '默认空位', group_icon: '' },
-            { group_id: '0006', group_name: '默认空位', group_icon: '' },
-            { group_id: '0007', group_name: '默认空位', group_icon: '' },
-            { group_id: '0008', group_name: '默认空位', group_icon: '' },
-            { group_id: '0009', group_name: '默认空位', group_icon: '' },
-            { group_id: '0010', group_name: '默认空位', group_icon: '' }
-        ];
-
         this._color_action = cc.sequence(
             cc.tintTo(.52, 19, 40, 60),
             cc.tintTo(.2, 255, 255, 255)
@@ -119,7 +106,7 @@ MAIN_EFFECTS_ACTION.MainLayer = cc.Layer.extend({
         this._webgl = 'opengl' in cc.sys.capabilities && cc._renderType === cc.game.RENDER_TYPE_WEBGL;
         this.addBg();
         this.addTree();
-        this.initTeam(_json);
+        // this.initTeam(_json);
 
         // var _bg_color = new cc.LayerColor(cc.color(0, 0, 0), this._winSize.width, this._winSize.height);
         // this.addChild(_bg_color);
@@ -246,8 +233,16 @@ MAIN_EFFECTS_ACTION.MainLayer = cc.Layer.extend({
         this.addChild(_tree);
     },
     initTeam: function (data_array) {
+
+        var _len = 10- data_array.length;
+        //更新 换队index
+        this._team_change_index = data_array.length;
+        for (var i=0; i<_len;i++) {
+            data_array.push({ group_id: 'aaa', group_name: '默认空位', group_icon: '' });
+        }
+
         var _team = null;
-        for (var i = 0, _len = data_array.length; i < _len; i++) {
+        for (i = 0, _len = data_array.length; i < _len; i++) {
             _team = new Team_class(data_array[i]);
             _team.setPosition(this._pos_start_array[i]);
             this.addChild(_team, 5);
@@ -375,10 +370,10 @@ MAIN_EFFECTS_ACTION.MainLayer = cc.Layer.extend({
         if(_team){
             this.attackingAction(_team.getPosition());
         }else{
-            this.changeTeam(team_data)
+            this.changeTeam(team_data);
             setTimeout(function () {
                 _this.teamAttackTree(team_data)
-            },1000)
+            },1000);
         }
     },
     /**

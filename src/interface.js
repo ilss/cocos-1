@@ -60,7 +60,7 @@
             _distance = cc.pDistance(start_pos, end_pos);
             return _distance / speed;
         }
-    }
+    };
 
 
 
@@ -86,7 +86,7 @@
                     return 0;
             }
         },
-    }
+    };
     /**
      * @func
      * @desc  初始化10只队伍
@@ -94,10 +94,10 @@
      * @returns 
      */
     function initTeam (data_array) {
-        if (data_array instanceof Array) {
-            MAIN_EFFECTS_ACTION._EFFECTS_MAIN_LAYER.changeTeam(obj);
+        if (GLOBAL_FUNC_SIMPLEEDU.isArray(data_array)) {
+            MAIN_EFFECTS_ACTION._EFFECTS_MAIN_LAYER.initTeam(data_array);
         } else {
-            throw new Error('changeTeam 参数必须为数组');
+            throw new Error('initTeam 参数必须为数组');
         }
     }
     function teamAttackTree (team_data) {
@@ -136,7 +136,7 @@
         }
         MAIN_EFFECTS_ACTION._EFFECTS_MAIN_LAYER.changeTeam(obj);
     }
-
+    MAIN_EFFECTS_ACTION.FLAG_INIT_TEAM = initTeam;
     MAIN_EFFECTS_ACTION.FLAG_TEAMATTACKTREE = teamAttackTree;
     MAIN_EFFECTS_ACTION.FLAG_CHANGE_TEAM = changeTeam;
 }(window));

@@ -101,6 +101,17 @@
   <script cocos src="main.js"></script>
   <script> 
     // setInterval(function () { ATTCAKING_ACTION(3); }, 100);
+    setTimeout(function(){
+        MAIN_EFFECTS_ACTION.FLAG_INIT_TEAM([
+            { group_id: '0001', group_name: '0001', group_icon: '' },
+            { group_id: '0002', group_name: '0002', group_icon: '' },
+            { group_id: '0003', group_name: '0003', group_icon: '' },
+            { group_id: '0004', group_name: '0004', group_icon: '' },
+            { group_id: '0005', group_name: '0005', group_icon: '' },
+            { group_id: '0006', group_name: '0006', group_icon: '' }
+        ]);
+    },1000);
+
     var btn = document.querySelector("#change_team_btn");
     btn.onclick = function () {
         MAIN_EFFECTS_ACTION.FLAG_CHANGE_TEAM({group_id: 188, group_name: "team2", group_icon: "/cstadmin/images/viewer/teamuser/team-default.png"});

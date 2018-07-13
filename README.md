@@ -16,15 +16,3 @@
     'group_icon': '/img/xx.jpg' // 团队头像
 }
 ```
----
-> 更换队伍:
-> 
-> MAIN_EFFECTS_ACTION.FLAG_CHANGE_TEAM(obj)
-```
-* @param {object} obj 
-{
-    'group_id': 1, // 团队id
-    'group_name': '赵信团队', // 团队名称
-    'group_icon': '/img/xx.jpg' // 团队头像
-}
-```

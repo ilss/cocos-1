@@ -369,8 +369,17 @@ MAIN_EFFECTS_ACTION.MainLayer = cc.Layer.extend({
         return _pos_array;
     },
     teamAttackTree: function (team_data) {
-        var _team = this._team_array[GLOBAL_FUNC_SIMPLEEDU.findObjFromArray(team_data, 'group_id', this._team_array, '_team_id')];
-        this.attackingAction(_team.getPosition());
+        var _this = this,
+            _team = this._team_array[GLOBAL_FUNC_SIMPLEEDU.findObjFromArray(team_data, 'group_id', this._team_array, '_team_id')];
+        // cc.log(team_data);
+        if(_team){
+            this.attackingAction(_team.getPosition());
+        }else{
+            this.changeTeam(team_data)
+            setTimeout(function () {
+                _this.teamAttackTree(team_data)
+            },1000)
+        }
     },
     /**
      * @func 

@@ -85,5 +85,13 @@ cc.game.onStart = function () {
         cc.director.runScene(new MAIN_EFFECTS_ACTION.HelloWorldScene());
     }, this);
 };
-
+// cc.game._initConfig( {
+//     project_type: "javascript",
+//     debugMode: 1,
+//     showFPS: false,
+//     frameRate: 60,
+//     noCache: false,
+//     id: "actionEffectGameCanvas",
+//     renderMode: 0,
+// });
 cc.game.run();

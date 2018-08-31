@@ -64,7 +64,7 @@
 
 
 
-    window["MAIN_EFFECTS_ACTION"] = {
+    window.MAIN_EFFECTS_ACTION = {
         _EFFECTS_MAIN_LAYER: null,
         /**
          * @func 
@@ -100,9 +100,10 @@
             throw new Error('initTeam 参数必须为数组');
         }
     }
-    function teamAttackTree (team_data) {
+    //htmlHidden  单独处理FF 页面隐藏时  canvas 暂停的问题;
+    function teamAttackTree (team_data, htmlHidden) {
         if (GLOBAL_FUNC_SIMPLEEDU.objHasSomeProperty(team_data, ['group_id'])) {
-            MAIN_EFFECTS_ACTION._EFFECTS_MAIN_LAYER.teamAttackTree(team_data);
+            MAIN_EFFECTS_ACTION._EFFECTS_MAIN_LAYER.teamAttackTree(team_data,htmlHidden);
         } else {
             throw new Error('changeTeam 参数必须为数组');
         }
